@@ -66,6 +66,16 @@ Floating CafeBar
     .build().show();
 ```
 
+CafeBar above Translucent NavigationBar
+```java
+CafeBar.builder(context)
+    .content(R.string.text)
+    .fitSystemWindow(true)
+    .neutralText("Above NavBar")
+    .neutralColor(Color.parseColor("#EEFF41"))
+    .build().show();
+```
+
 # Usage
 Builder
 - `customView()` &#8594; User custom view

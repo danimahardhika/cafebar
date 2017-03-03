@@ -1,7 +1,7 @@
 # CafeBar
 [![](https://jitpack.io/v/danimahardhika/cafebar.svg)](https://jitpack.io/#danimahardhika/cafebar) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 
-An upgraded Snackbar for Android that provides more options and easy to use
+An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.0.0/sample-release.apk).
 
 # Gradle Dependency
 The minimum API level supported by this library is API 13

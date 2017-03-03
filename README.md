@@ -28,6 +28,34 @@ dependencies {
 <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="440">
 <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="440">
 
+# Usage
+Show simple CafeBar
+```java
+CafeBar.make(context, R.string.text, CafeBarDuration.SHORT).show();
+```
+
+Using builder
+```java
+CafeBar.builder(context)
+    .theme(CafeBarTheme.LIGHT)
+    .content(R.string.text)
+    .neutralText("Action")
+    .build().show();
+```
+
+Retrieve CafeBar view
+```java
+CafeBar.Builder builder = new CafeBar.Builder(context);
+...
+
+CafeBar cafeBar = builder.build();
+
+View v = cafeBar.getCafeBarView();
+//Do something
+
+cafeBar.show();
+```
+
 # License
 ```
 Copyright (c) 2017 Dani Mahardhika

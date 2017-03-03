@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:text="CafeBar Sample"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_single_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar Single Line" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_multi_lines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar Multi Lines" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_themed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar Themed" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar with Action" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_themed_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar Themed with Action" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar with Icon" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_icon_unfiltered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar with Icon Unfiltered" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_icon_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar with Icon Action" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/simple_button_positive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Simple CafeBar with Positive Button" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/themed_long_action_noshadow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Themed with Long Text Action no Shadow" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/themed_custom_background_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Themed with Custom Background Color" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/themed_button_positive_negative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Themed with Icon and Button Callback" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/floating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Floating" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/themed_floating_gravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Themed Floating with Custom Gravity" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/floating_long_text_icon_all_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CafeBar Floating with Long Text Icon All Button Set" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/with_custom_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="With Custom View" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/with_custom_view_adjusted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="With Custom View Adjusted" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/floating_with_custom_view_adjusted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Floating With Custom View Adjusted" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/custom_typeface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Custom Typeface" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="bold"
+            android:text="Activity Sample"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/activity_trasnlucent_navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Activity Translucent Navbar" />
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/under_navbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Under Navbar" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/above_navbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Above Navbar" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/above_navbar_move_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Above Navbar Move Fab" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/floating_under_navbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floating Under Navbar" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/floating_above_navbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floating Above Navbar" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/floating_above_navbar_move_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floating Above Navbar Move Fab" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/with_custom_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="With Custom View" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/with_custom_view_adjusted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="With Custom View Adjusted" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/with_custom_view_adjusted_move_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="With Custom View Adjusted Move Fab" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/floating_with_custom_view_adjusted_move_fab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floating With Custom View Adjusted Move Fab" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end" />
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </FrameLayout>
+
+</ScrollView>

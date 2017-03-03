@@ -56,6 +56,35 @@ View v = cafeBar.getCafeBarView();
 cafeBar.show();
 ```
 
+Floating CafeBar
+```java
+ CafeBar.builder(context)
+    .content("some text")
+    .floating(true)
+    .neutralText("Floating")
+    .neutralColor(Color.parseColor("#EEFF41"))
+    .build().show();
+```
+
+# Usage
+Builder
+- `customView()` &#8594; User custom view
+- `to()` &#8594; Set target view, it should be coordinator layout
+- `content()` &#8594; Content text
+- `contentTypeface()` &#8594; Custom typeface for content
+- `maxLines()` &#8594; Max content lines, must be between 1 to 6
+- `duration()` &#8594; Show duration
+- `theme()` &#8594; CafeBar theme, there are 3 choice available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`
+- `icon()` &#8594; Icon shown on left side of content
+- `showShadow()` &#8594; Enable or disable shadow
+- `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true
+- `floating()` &#8594; Set CafeBar style to floating
+- `gravity()` &#8594; Set CafeBar view gravity, only works for tablet and floating
+- `fitSystemWindow()` &#8594; Show CafeBar above translucent navigation bar
+- `neutralText()` &#8594; Neutral action text
+- `neutralColor()` &#8594; Neutral action text color
+- `neutralTypeface()` &#8594; Custom typeface for neutral text
+
 # License
 ```
 Copyright (c) 2017 Dani Mahardhika

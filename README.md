@@ -24,9 +24,9 @@ dependencies {
 ```
 
 # Previews
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="416">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="416">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="416">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="422">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="422">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="422">
 
 # License
 ```

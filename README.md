@@ -84,6 +84,22 @@ Builder
 - `neutralText()` &#8594; Neutral action text
 - `neutralColor()` &#8594; Neutral action text color
 - `neutralTypeface()` &#8594; Custom typeface for neutral text
+- `onNeutral()` &#8594; Neutral action callback
+- `positiveText()` &#8594; Positive action text
+- `positiveColor()` &#8594; Positive action text color
+- `positiveTypeface()` &#8594; Custom typeface for positive text
+- `onPositive()` &#8594; Positive action callback
+- `negativeText()` &#8594; Negative action text
+- `negativeColor()` &#8594; Negative action text color
+- `negativeTypeface()` &#8594; Custom typeface for negative text
+- `onNegative()` &#8594; Negative action callback
+
+CafeBar
+- `make()` &#8594; Create CafeBar
+- `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored
+- `getCafeBarVIew()` &#8594; Get root view of CafeBar, default is `LinearLayout`
+- `show()` &#8594; Show CafeBar
+- `dismiss()` &#8594; Dismiss CafeBar
 
 # License
 ```

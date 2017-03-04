@@ -75,7 +75,7 @@ CafeBar.builder(context)
     .build().show();
 ```
 
-# Usage
+# Customization
 Builder
 - `customView()` &#8594; Use custom view
 - `to()` &#8594; Set target view, it should be coordinator layout

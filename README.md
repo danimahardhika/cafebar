@@ -3,6 +3,10 @@
 
 An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.0.0/sample-release.apk).
 
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
+
 # Gradle Dependency
 The minimum API level supported by this library is API 13
 
@@ -22,11 +26,6 @@ dependencies {
     compile 'com.github.danimahardhika:cafebar:1.0.0'
 }
 ```
-
-# Previews
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
 
 # Usage
 Show simple CafeBar
@@ -78,7 +77,7 @@ CafeBar.builder(context)
 
 # Usage
 Builder
-- `customView()` &#8594; User custom view
+- `customView()` &#8594; Use custom view
 - `to()` &#8594; Set target view, it should be coordinator layout
 - `content()` &#8594; Content text
 - `contentTypeface()` &#8594; Custom typeface for content
@@ -103,6 +102,7 @@ Builder
 - `negativeColor()` &#8594; Negative action text color
 - `negativeTypeface()` &#8594; Custom typeface for negative text
 - `onNegative()` &#8594; Negative action callback
+- `build()` &#8594; Create CafeBar
 
 CafeBar
 - `make()` &#8594; Create CafeBar

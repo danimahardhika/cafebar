@@ -1,5 +1,5 @@
 # CafeBar
-[![](https://jitpack.io/v/danimahardhika/cafebar.svg)](https://jitpack.io/#danimahardhika/cafebar) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![](https://jitpack.io/v/danimahardhika/cafebar.svg)](https://jitpack.io/#danimahardhika/cafebar) [![Build Status](https://travis-ci.org/danimahardhika/cafebar.svg?branch=master)](https://travis-ci.org/danimahardhika/cafebar) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 
 An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.0.0/sample-release.apk).
 

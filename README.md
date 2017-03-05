@@ -23,7 +23,7 @@ Add the dependency
 ```Gradle
 dependencies {
     //...
-    compile 'com.github.danimahardhika:cafebar:1.0.1'
+    compile 'com.github.danimahardhika:cafebar:1.0.2'
 }
 ```
 
@@ -78,7 +78,7 @@ CafeBar.builder(context)
 # Customization
 Builder
 - `customView()` &#8594; Use custom view
-- `to()` &#8594; Set target view, it should be coordinator layout
+- `to()` &#8594; Set target view, it should be `CoordinatorLayout`
 - `content()` &#8594; Content text
 - `contentTypeface()` &#8594; Custom typeface for content
 - `maxLines()` &#8594; Max content lines, must be between 1 to 6
@@ -87,6 +87,7 @@ Builder
 - `icon()` &#8594; Icon shown on left side of content
 - `showShadow()` &#8594; Enable or disable shadow
 - `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true
+- `swipeToDismiss()` &#8594; Enable or disable swipe to dismiss, only works with target view `CoordinatorLayout`
 - `floating()` &#8594; Set CafeBar style to floating
 - `gravity()` &#8594; Set CafeBar view gravity, only works for tablet and floating
 - `fitSystemWindow()` &#8594; Show CafeBar above translucent navigation bar

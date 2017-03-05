@@ -23,7 +23,7 @@ Add the dependency
 ```Gradle
 dependencies {
     //...
-    compile 'com.github.danimahardhika:cafebar:1.0.2'
+    compile 'com.github.danimahardhika:cafebar:1.0.3'
 }
 ```
 

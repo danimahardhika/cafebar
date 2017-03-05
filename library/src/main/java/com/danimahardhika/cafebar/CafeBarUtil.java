@@ -461,7 +461,7 @@ class CafeBarUtil {
             longAction = true;
             params.setMargins(0, (side - padding), 0, 0);
         } else {
-            params.gravity = Gravity.END;
+            params.gravity = Gravity.CENTER_VERTICAL | Gravity.END;
         }
 
         button.setLayoutParams(params);

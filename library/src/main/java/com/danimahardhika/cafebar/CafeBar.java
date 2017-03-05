@@ -21,7 +21,6 @@ package com.danimahardhika.cafebar;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.BoolRes;
@@ -31,10 +30,12 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -320,6 +321,19 @@ public class CafeBar {
         if (mSnackBar == null) return;
 
         mSnackBar.show();
+
+        if (mBuilder.mSwipeToDismiss) return;
+
+        if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
+                    ((CoordinatorLayout.LayoutParams) mSnackBar.getView().getLayoutParams()).setBehavior(null);
+                    return true;
+                }
+            });
+        }
     }
 
     @NonNull
@@ -351,6 +365,7 @@ public class CafeBar {
         private boolean mFloating = false;
         private boolean mAdjustCustomView = false;
         private boolean mFilterIconColor = true;
+        private boolean mSwipeToDismiss = true;
 
         private Typeface mContentTypeface;
         private Typeface mPositiveTypeface;
@@ -475,6 +490,16 @@ public class CafeBar {
 
         public Builder autoDismiss(boolean autoDismiss) {
             mAutoDismiss = autoDismiss;
+            return this;
+        }
+
+        public Builder swipeToDismiss(@BoolRes int res) {
+            mSwipeToDismiss = mContext.getResources().getBoolean(res);
+            return this;
+        }
+
+        public Builder swipeToDismiss(boolean swipeToDismiss) {
+            mSwipeToDismiss = swipeToDismiss;
             return this;
         }
 

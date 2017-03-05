@@ -21,6 +21,7 @@ package com.danimahardhika.cafebar;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.BoolRes;
@@ -34,7 +35,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -52,12 +52,7 @@ public class CafeBar {
             LogUtil.d("CafeBar doesn't have customView, preparing it...");
             cafeBarLayout = CafeBarUtil.getBaseCafeBarView(mBuilder);
         } else {
-            if (mBuilder.mAdjustCustomView) {
-                LogUtil.d("CafeBar has customView adjusting padding, setup content, button etc ignored");
-                CafeBarUtil.adjustCustomView(mBuilder, cafeBarLayout);
-            } else {
-                LogUtil.d("adjustCustomView = false, leave custom view as it is");
-            }
+            CafeBarUtil.adjustCustomView(mBuilder, cafeBarLayout);
         }
 
         mSnackBar = CafeBarUtil.getBaseSnackBar(cafeBarLayout, mBuilder);
@@ -210,6 +205,9 @@ public class CafeBar {
         boolean longAction = CafeBarUtil.isLongAction(action);
         LinearLayout contentBase = (LinearLayout) root.findViewById(R.id.cafebar_content_base);
 
+        //Todo: remove this, for testing purpose only
+        //contentBase.setBackgroundColor(Color.GREEN);
+
         if (contentBase.getChildCount() > 1) {
             LogUtil.d("content container childView count > 1, setAction already set from builder via neutralText");
             return;
@@ -228,8 +226,10 @@ public class CafeBar {
             contentBase.setOrientation(LinearLayout.VERTICAL);
             content.setPadding(0, 0, buttonPadding, 0);
         } else {
-            content.setLayoutParams(new LinearLayout.LayoutParams(
-                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) content.getLayoutParams();
+            params.width = 0;
+            params.weight = 1f;
+            content.setLayoutParams(params);
         }
 
         int navBar = 0;
@@ -245,6 +245,9 @@ public class CafeBar {
             if (mBuilder.longContent()) {
                 LogUtil.d("content has multi lines");
                 root.setPadding(side, side, (side - buttonPadding), (side - bottom + navBar));
+            } else if (longAction){
+                LogUtil.d("content only 1 line with longAction");
+                root.setPadding(side, top, (side - buttonPadding), (top - buttonPadding + navBar));
             } else {
                 LogUtil.d("content only 1 line");
                 root.setPadding(side, (top - buttonPadding), (side - buttonPadding), (top - buttonPadding + navBar));
@@ -253,6 +256,9 @@ public class CafeBar {
             if (mBuilder.longContent()) {
                 LogUtil.d("content has multi lines");
                 root.setPadding(side, side, (side - buttonPadding + navBar), (side - bottom));
+            } else if (longAction) {
+                LogUtil.d("content only 1 line with longAction");
+                root.setPadding(side, top, (side - buttonPadding + navBar), (top - buttonPadding));
             } else {
                 LogUtil.d("content only 1 line");
                 root.setPadding(side, (top - buttonPadding), (side - buttonPadding + navBar), (top - buttonPadding));
@@ -602,6 +608,10 @@ public class CafeBar {
         @Nullable
         View customView() {
             return mCustomView;
+        }
+
+        boolean adjustCustomView() {
+            return mAdjustCustomView;
         }
 
         @Nullable

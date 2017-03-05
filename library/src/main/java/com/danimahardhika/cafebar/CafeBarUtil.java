@@ -63,6 +63,15 @@ class CafeBarUtil {
             return;
         }
 
+        viewGroup.setClickable(true);
+
+        if (!builder.adjustCustomView()) {
+            LogUtil.d("adjustCustomView = false, leave custom view as it is");
+            return;
+        }
+
+        LogUtil.d("CafeBar has customView adjusting padding, setup content, button etc ignored");
+
         int left = view.getPaddingLeft();
         int top = view.getPaddingTop();
         int right = view.getPaddingRight();
@@ -129,7 +138,7 @@ class CafeBarUtil {
         LinearLayout contentBase = new LinearLayout(builder.context());
         contentBase.setId(R.id.cafebar_content_base);
         contentBase.setOrientation(LinearLayout.HORIZONTAL);
-        contentBase.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        contentBase.setGravity(Gravity.CENTER_VERTICAL);
         contentBase.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -157,6 +166,9 @@ class CafeBarUtil {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         content.setGravity(Gravity.CENTER_VERTICAL);
+
+        //Todo: remove this, for testing purpose only
+        //content.setBackgroundColor(Color.BLUE);
 
         boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
         if (tabletMode || builder.floating()) {
@@ -442,12 +454,14 @@ class CafeBarUtil {
         params.setMargins(margin, 0, 0, 0);
 
         if (longAction) {
-            params.setMargins(margin, (side - padding), 0, 0);
+            params.setMargins(0, (side - padding), 0, 0);
         }
 
         if (builder.positiveText() != null || builder.negativeText() != null) {
             longAction = true;
             params.setMargins(0, (side - padding), 0, 0);
+        } else {
+            params.gravity = Gravity.END;
         }
 
         button.setLayoutParams(params);

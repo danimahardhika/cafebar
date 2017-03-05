@@ -19,7 +19,7 @@
 
     <!-- Floating Size -->
     <dimen name="cafebar_floating_min_width">108dp</dimen>
-    <dimen name="cafebar_floating_max_width">468dp</dimen>
+    <dimen name="cafebar_floating_max_width">368dp</dimen>
     <dimen name="cafebar_floating_padding">16dp</dimen>
 
 </resources>

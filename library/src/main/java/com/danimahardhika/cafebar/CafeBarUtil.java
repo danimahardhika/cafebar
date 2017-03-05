@@ -485,13 +485,16 @@ class CafeBarUtil {
         DisplayMetrics metrics = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+        boolean tabletMode = context.getResources().getBoolean(R.bool.cafebar_tablet_mode);
         int padding = (context.getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side) * 2) +
                 context.getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin_start);
 
         int minWidth = 0;
-        if (floating) {
+        int maxWidth = 0;
+        if (floating || tabletMode) {
             padding += context.getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
             minWidth = context.getResources().getDimensionPixelSize(R.dimen.cafebar_floating_min_width);
+            maxWidth = context.getResources().getDimensionPixelSize(R.dimen.cafebar_floating_max_width);
         }
 
         //At the moment it's not possible to measure action width
@@ -505,6 +508,8 @@ class CafeBarUtil {
         //Checking if target width < minWidth
         if (width < minWidth) {
             width = minWidth;
+        } else if (width > maxWidth && maxWidth > 0) {
+            width = maxWidth;
         }
 
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST);

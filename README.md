@@ -23,7 +23,7 @@ Add the dependency
 ```Gradle
 dependencies {
     //...
-    compile 'com.github.danimahardhika:cafebar:1.0.0'
+    compile 'com.github.danimahardhika:cafebar:1.0.1'
 }
 ```
 
@@ -83,7 +83,7 @@ Builder
 - `contentTypeface()` &#8594; Custom typeface for content
 - `maxLines()` &#8594; Max content lines, must be between 1 to 6
 - `duration()` &#8594; Show duration
-- `theme()` &#8594; CafeBar theme, there are 3 choice available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`
+- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`
 - `icon()` &#8594; Icon shown on left side of content
 - `showShadow()` &#8594; Enable or disable shadow
 - `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true

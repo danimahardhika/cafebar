@@ -189,6 +189,11 @@ class CafeBarUtil {
         int side = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
         int top = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
 
+        if (drawable != null) {
+            content.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+            content.setCompoundDrawablePadding(top);
+        }
+
         //Try to measure height of content to determine if it has more than 1 line
 
         int measuredHeight = getMeasuredContentHeight(builder.context(), content, builder.floating());
@@ -202,11 +207,6 @@ class CafeBarUtil {
             LogUtil.d("measured height > measured content height for 1 line, content probably has more than 1 line");
             top = side;
             builder.longContent(true);
-        }
-
-        if (drawable != null) {
-            content.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            content.setCompoundDrawablePadding(top);
         }
 
         root.setPadding(side, top, side, top);
@@ -516,6 +516,8 @@ class CafeBarUtil {
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
 
+        LogUtil.d("minWidth: " +minWidth);
+        LogUtil.d("maxWidth: " +maxWidth);
         LogUtil.d("target width: " +width);
         LogUtil.d("measured width: " +textView.getMeasuredWidth());
         return textView.getMeasuredHeight();

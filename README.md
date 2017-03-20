@@ -3,9 +3,7 @@
 
 An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.0.0/sample-release.apk).
 
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456">
-<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
+<img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
 
 # Gradle Dependency
 The minimum API level supported by this library is API 13

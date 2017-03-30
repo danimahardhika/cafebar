@@ -8,14 +8,13 @@
 
     <dimen name="cafebar_button_margin_start">24dp</dimen>
     <dimen name="cafebar_button_padding">10dp</dimen>
+    <dimen name="cafebar_button_margin">8dp</dimen>
 
-    <dimen name="cafebar_shadow_top">7dp</dimen>
-    <dimen name="cafebar_shadow_around">2.5dp</dimen>
+    <dimen name="cafebar_shadow_top">4dp</dimen>
+    <dimen name="cafebar_shadow_around">2dp</dimen>
     <dimen name="cafebar_content_text">14sp</dimen>
 
     <dimen name="cafebar_corner_radius">0dp</dimen>
-
-    <dimen name="cafebar_default_font_padding">5dp</dimen>
 
     <!-- Floating Size -->
     <dimen name="cafebar_floating_min_width">108dp</dimen>

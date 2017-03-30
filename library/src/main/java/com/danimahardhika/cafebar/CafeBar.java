@@ -21,6 +21,7 @@ package com.danimahardhika.cafebar;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.BoolRes;
@@ -201,13 +202,12 @@ public class CafeBar {
         }
 
         LogUtil.d("preparing action view");
+        mBuilder.mNeutralText = action;
+        mBuilder.mNeutralColor = color;
 
         LinearLayout root = (LinearLayout) getCafeBarView();
         boolean longAction = CafeBarUtil.isLongAction(action);
         LinearLayout contentBase = (LinearLayout) root.findViewById(R.id.cafebar_content_base);
-
-        //Todo: remove this, for testing purpose only
-        //contentBase.setBackgroundColor(Color.GREEN);
 
         if (contentBase.getChildCount() > 1) {
             LogUtil.d("content container childView count > 1, setAction already set from builder via neutralText");
@@ -272,6 +272,27 @@ public class CafeBar {
             button.setTypeface(mBuilder.mNeutralTypeface);
         }
 
+        if (!longAction) {
+            LogUtil.d("checking if content root padding need to be re-adjusted");
+            Point point = CafeBarUtil.getMeasuredContentSize(mBuilder);
+            int defaultHeight = CafeBarUtil.getDefaultContentHeight(mBuilder.mContext, mBuilder.mNeutralTypeface);
+            if (point.y > defaultHeight) {
+                LogUtil.d("re-adjusting content root padding");
+
+                if (mBuilder.mFitSystemWindow && !mBuilder.mFloating) {
+                    if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        root.setPadding(side, side, side, (side + navBar));
+                    } else {
+                        root.setPadding(side, side, (side + navBar), side);
+                    }
+                } else {
+                    root.setPadding(side, side, side, side);
+                }
+            } else {
+                LogUtil.d("no need to re-adjust content root padding");
+            }
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,13 +321,12 @@ public class CafeBar {
         boolean tabletMode = mBuilder.mContext.getResources().getBoolean(R.bool.cafebar_tablet_mode);
         LogUtil.d("Tablet mode: " +tabletMode);
 
-        LinearLayout linearLayout = (LinearLayout) snackBarLayout.getChildAt(0);
-
         if (tabletMode || mBuilder.mFloating) {
-            CardView cardView = (CardView) linearLayout.getChildAt(0);
+            CardView cardView = (CardView) snackBarLayout.getChildAt(0);
             return cardView.getChildAt(0);
         }
 
+        LinearLayout linearLayout = (LinearLayout) snackBarLayout.getChildAt(0);
         if (mBuilder.mShowShadow) return linearLayout.getChildAt(1);
         return linearLayout.getChildAt(0);
     }

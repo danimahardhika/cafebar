@@ -63,7 +63,7 @@ cafeBar.show();
     .build().show();
 ```
 
-### CafeBar above Translucent NavigationBar
+#### CafeBar above Translucent NavigationBar
 ```java
 CafeBar.builder(context)
     .content(R.string.text)

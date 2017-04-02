@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CafeBar.builder(MainActivity.this)
                         .theme(CafeBarTheme.LIGHT)
-                        .content(R.string.demo_text)
+                        .content("Lorem ipsum lorem ipsum lorem ipsum lorem ipsum")
                         .neutralText("Action")
                         .build().show();
             }
@@ -163,9 +163,14 @@ public class MainActivity extends AppCompatActivity {
                         .content(R.string.demo_text)
                         .duration(2000);
 
+                //--- You can use custom theme in release 1.0.7
+                //Text color (content and buttons) automatically set
+                builder.theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
+
                 CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
-                v.setBackgroundColor(Color.parseColor("#455A64"));
+                //--- Old method
+                //View v = cafeBar.getCafeBarView();
+                //v.setBackgroundColor(Color.parseColor("#455A64"));
 
                 cafeBar.show();
             }

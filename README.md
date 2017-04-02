@@ -26,12 +26,12 @@ dependencies {
 ```
 
 # Usage
-Show simple CafeBar
+#### Show simple CafeBar
 ```java
 CafeBar.make(context, R.string.text, CafeBarDuration.SHORT).show();
 ```
 
-Using builder
+#### Using builder
 ```java
 CafeBar.builder(context)
     .theme(CafeBarTheme.LIGHT)
@@ -40,7 +40,7 @@ CafeBar.builder(context)
     .build().show();
 ```
 
-Retrieve CafeBar view
+#### Retrieve CafeBar view
 ```java
 CafeBar.Builder builder = new CafeBar.Builder(context);
 ...
@@ -53,7 +53,7 @@ View v = cafeBar.getCafeBarView();
 cafeBar.show();
 ```
 
-Floating CafeBar
+#### Floating CafeBar
 ```java
  CafeBar.builder(context)
     .content("some text")
@@ -63,13 +63,24 @@ Floating CafeBar
     .build().show();
 ```
 
-CafeBar above Translucent NavigationBar
+### CafeBar above Translucent NavigationBar
 ```java
 CafeBar.builder(context)
     .content(R.string.text)
     .fitSystemWindow(true)
     .neutralText("Above NavBar")
     .neutralColor(Color.parseColor("#EEFF41"))
+    .build().show();
+```
+
+#### Custom Theme
+```java
+CafeBar.builder(context)
+    //With release 1.0.7 you can use custom theme
+    //Text color (content and buttons) automatically set
+    .theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
+    .content(R.string.text)
+    .neutralText(R.string.action)
     .build().show();
 ```
 

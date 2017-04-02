@@ -90,13 +90,13 @@ Builder
 - `to()` &#8594; Set target view, it should be `CoordinatorLayout`
 - `content()` &#8594; Content text
 - `contentTypeface()` &#8594; Custom typeface for content
-- `maxLines()` &#8594; Max content lines, must be between 1 to 6
+- `maxLines()` &#8594; Max content lines, must be between 1 to 6.
 - `duration()` &#8594; Show duration
-- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`
+- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`. With release 1.0.7 you can use custom theme `new CafeBarTheme.Custom()`.
 - `icon()` &#8594; Icon shown on left side of content
 - `showShadow()` &#8594; Enable or disable shadow
 - `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true
-- `swipeToDismiss()` &#8594; Enable or disable swipe to dismiss, only works with target view `CoordinatorLayout`
+- `swipeToDismiss()` &#8594; Enable or disable swipe to dismiss, only works with target view `CoordinatorLayout`.
 - `floating()` &#8594; Set CafeBar style to floating
 - `gravity()` &#8594; Set CafeBar view gravity, only works for tablet and floating
 - `fitSystemWindow()` &#8594; Show CafeBar above translucent navigation bar
@@ -116,8 +116,8 @@ Builder
 
 CafeBar
 - `make()` &#8594; Create CafeBar
-- `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored
-- `getCafeBarVIew()` &#8594; Get root view of CafeBar, default is `LinearLayout`
+- `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored.
+- `getCafeBarVIew()` &#8594; Get root view of CafeBar, default is `LinearLayout`.
 - `show()` &#8594; Show CafeBar
 - `dismiss()` &#8594; Dismiss CafeBar
 

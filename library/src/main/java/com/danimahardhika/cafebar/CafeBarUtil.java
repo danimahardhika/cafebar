@@ -123,6 +123,13 @@ class CafeBarUtil {
     @NonNull
     static View getBaseCafeBarView(@NonNull CafeBar.Builder builder) {
         int color = builder.theme().getColor();
+        int titleColor = builder.theme().getTitleColor();
+
+        CafeBarTheme.Custom customTheme = builder.customTheme();
+        if (customTheme != null) {
+            color = customTheme.getColor();
+            titleColor = customTheme.getTitleColor();
+        }
 
         //Creating LinearLayout as rootView
         LinearLayout root = new LinearLayout(builder.context());
@@ -150,7 +157,7 @@ class CafeBarUtil {
             drawable = getResizedDrawable(
                     builder.context(),
                     builder.icon(),
-                    builder.theme().getTitleColor(),
+                    titleColor,
                     builder.filterIconColor());
         }
 
@@ -159,7 +166,7 @@ class CafeBarUtil {
         content.setId(R.id.cafebar_content);
         content.setMaxLines(builder.maxLines());
         content.setEllipsize(TextUtils.TruncateAt.END);
-        content.setTextColor(builder.theme().getTitleColor());
+        content.setTextColor(titleColor);
         content.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.context().getResources()
                 .getDimension(R.dimen.cafebar_content_text));
         content.setText(builder.content());
@@ -439,6 +446,14 @@ class CafeBarUtil {
             res = R.layout.cafebar_action_button;
         }
 
+        CafeBarTheme.Custom customTheme = builder.customTheme();
+        if (customTheme != null) {
+            int titleColor = customTheme.getTitleColor();
+            if (titleColor != Color.WHITE) {
+                res = R.layout.cafebar_action_button;
+            }
+        }
+
         LogUtil.d("getting action view, longAction: " +longAction);
 
         int padding = builder.context().getResources().getDimensionPixelSize(
@@ -680,6 +695,15 @@ class CafeBarUtil {
     static int getTitleTextColor(@ColorInt int color) {
         double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
         return (darkness < 0.35) ? getDarkerColor(color) : Color.WHITE;
+    }
+
+    static int getSubTitleTextColor(@ColorInt int color) {
+        int titleColor = getTitleTextColor(color);
+        int alpha2 = Math.round(Color.alpha(titleColor) * 0.6f);
+        int red = Color.red(titleColor);
+        int green = Color.green(titleColor);
+        int blue = Color.blue(titleColor);
+        return Color.argb(alpha2, red, green, blue);
     }
 
     private static int getDarkerColor(@ColorInt int color) {

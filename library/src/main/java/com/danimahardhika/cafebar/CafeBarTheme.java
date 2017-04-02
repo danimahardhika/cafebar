@@ -20,6 +20,7 @@ package com.danimahardhika.cafebar;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 
 @SuppressWarnings("unused")
 public enum CafeBarTheme {
@@ -41,5 +42,34 @@ public enum CafeBarTheme {
     @ColorInt
     int getTitleColor() {
         return CafeBarUtil.getTitleTextColor(mColor);
+    }
+
+    @ColorInt
+    int getSubTitleColor() {
+        return CafeBarUtil.getSubTitleTextColor(mColor);
+    }
+
+    public static class Custom {
+
+        private int mColor;
+
+        public Custom(@ColorInt int color) {
+            mColor = color;
+        }
+
+        @ColorInt
+        int getColor() {
+            return mColor;
+        }
+
+        @ColorInt
+        int getTitleColor() {
+            return CafeBarUtil.getTitleTextColor(mColor);
+        }
+
+        @ColorInt
+        int getSubTitleColor() {
+            return CafeBarUtil.getSubTitleTextColor(mColor);
+        }
     }
 }

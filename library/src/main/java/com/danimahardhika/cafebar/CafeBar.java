@@ -64,6 +64,11 @@ public class CafeBar {
             return;
         }
 
+        if (mBuilder.mCustomView != null) {
+            LogUtil.d("CafeBar has custom view, set buttons ignored");
+            return;
+        }
+
         if (mBuilder.mPositiveText == null && mBuilder.mNegativeText == null) {
             LogUtil.d("CafeBar only contains neutral button");
             if (mBuilder.mNeutralText != null) {
@@ -281,12 +286,12 @@ public class CafeBar {
 
                 if (mBuilder.mFitSystemWindow && !mBuilder.mFloating) {
                     if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        root.setPadding(side, side, side, (side + navBar));
+                        root.setPadding(side, side, (side - buttonPadding), (side + navBar));
                     } else {
-                        root.setPadding(side, side, (side + navBar), side);
+                        root.setPadding(side, side, (side - buttonPadding + navBar), side);
                     }
                 } else {
-                    root.setPadding(side, side, side, side);
+                    root.setPadding(side, side, (side - buttonPadding), side);
                 }
             } else {
                 LogUtil.d("no need to re-adjust content root padding");
@@ -370,6 +375,7 @@ public class CafeBar {
         private View mCustomView;
 
         private CafeBarTheme mTheme = CafeBarTheme.DARK;
+        private CafeBarTheme.Custom mCustomTheme = null;
         private CafeBarGravity mGravity = CafeBarGravity.CENTER;
 
         private int mDuration = CafeBarDuration.SHORT.getDuration();
@@ -456,7 +462,15 @@ public class CafeBar {
 
         public Builder theme(@NonNull CafeBarTheme theme) {
             mTheme = theme;
-            mPositiveColor = mNegativeColor = mNeutralColor = mTheme.getTitleColor();
+            mPositiveColor = mTheme.getTitleColor();
+            mNegativeColor = mNeutralColor = mTheme.getSubTitleColor();
+            return this;
+        }
+
+        public Builder theme(@NonNull CafeBarTheme.Custom customTheme) {
+            mCustomTheme = customTheme;
+            mPositiveColor = mCustomTheme.getTitleColor();
+            mNegativeColor = mNeutralColor = mCustomTheme.getSubTitleColor();
             return this;
         }
 
@@ -667,6 +681,11 @@ public class CafeBar {
         @NonNull
         CafeBarTheme theme() {
             return mTheme;
+        }
+
+        @Nullable
+        CafeBarTheme.Custom customTheme() {
+            return mCustomTheme;
         }
 
         int duration() {

@@ -37,7 +37,7 @@ CafeBar.builder(context)
     .theme(CafeBarTheme.LIGHT)
     .content(R.string.text)
     .neutralText("Action")
-    .build().show();
+    .show();
 ```
 
 #### Retrieve CafeBar view
@@ -63,7 +63,7 @@ cafeBar.show();
     .neutralColor(Color.parseColor("#EEFF41"))
     //Or use color resource
     .neutralColor(R.color.neutralText)
-    .build().show();
+    .show();
 ```
 
 #### CafeBar above Translucent NavigationBar
@@ -74,7 +74,7 @@ CafeBar.builder(context)
     .fitSystemWindow()
     .neutralText("Above NavBar")
     .neutralColor(Color.parseColor("#EEFF41"))
-    .build().show();
+    .show();
 ```
 
 #### Custom Theme
@@ -85,7 +85,7 @@ CafeBar.builder(context)
     .theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
     .content(R.string.text)
     .neutralText(R.string.action)
-    .build().show();
+    .show();
 ```
 
 # Customization
@@ -124,7 +124,7 @@ Builder
 CafeBar
 - `make()` &#8594; Create CafeBar
 - `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored.
-- `getCafeBarVIew()` &#8594; Get root view of CafeBar, default is `LinearLayout`.
+- `getCafeBarView()` &#8594; Get root view of CafeBar, default is `LinearLayout`.
 - `show()` &#8594; Show CafeBar
 - `dismiss()` &#8594; Dismiss CafeBar
 

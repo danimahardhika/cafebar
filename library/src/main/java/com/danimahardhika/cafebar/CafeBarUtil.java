@@ -81,7 +81,7 @@ class CafeBarUtil {
         boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
         LogUtil.d("CafeBar tabletMode: " +tabletMode);
 
-        if (builder.fitSystemWindow() && !builder.floating()) {
+        if (builder.isFitSystemWindow() && !builder.floating()) {
             Configuration configuration = builder.context().getResources().getConfiguration();
             int navBar = getNavigationBarHeight(builder.context());
 
@@ -205,19 +205,27 @@ class CafeBarUtil {
         int defaultHeight = getDefaultContentHeight(builder.context(), builder.contentTypeface());
         LogUtil.d("measured content height for 1 line: " +defaultHeight);
 
-        if (point.y > defaultHeight) {
-            LogUtil.d("measured height > measured content height for 1 line, content probably has more than 1 line");
+        boolean moreThanOneLine = point.y > defaultHeight;
+        boolean containsPositive = builder.positiveText() != null;
+        boolean containsNegative = builder.negativeText() != null;
+        boolean longNeutralAction = isLongAction(builder.neutralText());
+
+        if (moreThanOneLine || containsPositive || containsNegative || longNeutralAction) {
+            LogUtil.d("More than one line: " +moreThanOneLine);
+            LogUtil.d("Contains positive button: " +containsPositive);
+            LogUtil.d("Contains negative button: " +containsNegative);
+            LogUtil.d("Long neutral action: " +longNeutralAction);
             top = side;
             builder.longContent(true);
         }
 
         root.setPadding(side, top, side, top);
 
-        LogUtil.d("fitSystemWindow: " +builder.fitSystemWindow());
+        LogUtil.d("fitSystemWindow: " +builder.isFitSystemWindow());
         if (builder.positiveText() == null && builder.negativeText() == null) {
             LogUtil.d("CafeBar not contains positive and negative button");
 
-            if (builder.fitSystemWindow() && !builder.floating()) {
+            if (builder.isFitSystemWindow() && !builder.floating()) {
                 Configuration configuration = builder.context().getResources().getConfiguration();
                 int navBar = getNavigationBarHeight(builder.context());
 
@@ -312,7 +320,7 @@ class CafeBarUtil {
                 R.dimen.cafebar_button_padding);
         root.setPadding(side, top, (side - buttonPadding), (top - buttonPadding));
 
-        if (builder.fitSystemWindow() && !builder.floating()) {
+        if (builder.isFitSystemWindow() && !builder.floating()) {
             Configuration configuration = builder.context().getResources().getConfiguration();
             int navBar = getNavigationBarHeight(builder.context());
 
@@ -394,7 +402,7 @@ class CafeBarUtil {
             snackBarLayout.setClipToPadding(false);
             snackBarLayout.setPadding(padding, shadow, padding, bottom);
 
-            if (builder.fitSystemWindow() && builder.floating()) {
+            if (builder.isFitSystemWindow() && builder.floating()) {
                 Configuration configuration = builder.context().getResources().getConfiguration();
                 int navBar = getNavigationBarHeight(builder.context());
 

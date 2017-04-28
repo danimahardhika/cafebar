@@ -59,7 +59,10 @@ cafeBar.show();
     .content("some text")
     .floating(true)
     .neutralText("Floating")
+    //You can parse string color
     .neutralColor(Color.parseColor("#EEFF41"))
+    //Or use color resource
+    .neutralColor(R.color.neutralText)
     .build().show();
 ```
 

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 CafeBar.builder(MainActivity.this)
                         .theme(CafeBarTheme.LIGHT)
                         .content(R.string.demo_text)
-                        .build().show();
+                        .show();
             }
         });
 
@@ -61,8 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 CafeBar.builder(MainActivity.this)
                         .theme(CafeBarTheme.LIGHT)
                         .content("Lorem ipsum lorem ipsum lorem ipsum lorem ipsum")
-                        .neutralText("Action")
-                        .build().show();
+                        .neutralText("Very Long Action Text")
+                        .buttonColor(Color.parseColor("#03A9F4"))
+                        .show();
             }
         });
 
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 CafeBar.builder(MainActivity.this)
                         .icon(R.drawable.ic_launcher)
                         .content(R.string.demo_text)
-                        .build().show();
+                        .show();
             }
         });
 
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 CafeBar.builder(MainActivity.this)
                         .icon(R.drawable.ic_launcher, false)
                         .content(R.string.demo_text)
-                        .build().show();
+                        .show();
             }
         });
 
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                         .icon(R.drawable.ic_action_info)
                         .content("CafeBar with Icon and Action")
                         .neutralText("Action")
-                        .build().show();
+                        .show();
             }
         });
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 CafeBar.builder(MainActivity.this)
                         .content(R.string.demo_text)
                         .positiveText("Positive")
-                        .build().show();
+                        .show();
             }
         });
 
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                 //Dismiss CafeBar when action pressed
                                 cafeBar.dismiss();
                             }
-                        }).build().show();
+                        }).show();
             }
         });
 
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                                 cafeBar.dismiss();
                             }
                         })
-                        .build().show();
+                        .show();
             }
         });
 
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         .duration(CafeBarDuration.SHORT.getDuration())
                         .neutralText("Floating")
                         .neutralColor(Color.parseColor("#EEFF41"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -238,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
                         .autoDismiss(false)
                         .neutralText("Floating")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                                 cafeBar.dismiss();
                             }
                         })
-                        .build().show();
+                        .show();
             }
         });
 
@@ -368,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
                         .neutralText("Dismiss")
                         .neutralColor(Color.parseColor("#EEFF41"))
                         .neutralTypeface(Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Bold.ttf"))
-                        .build().show();
+                        .show();
             }
         });
 

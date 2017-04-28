@@ -8,7 +8,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
 import com.danimahardhika.cafebar.CafeBar;
-import com.danimahardhika.cafebar.CafeBarDuration;
 
 public class TranslucentNavBarActivity extends AppCompatActivity {
 
@@ -25,7 +24,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                         .content(R.string.demo_text)
                         .neutralText("Under")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -35,10 +34,10 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CafeBar.builder(TranslucentNavBarActivity.this)
                         .content(R.string.demo_text)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .neutralText("Above")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -49,10 +48,11 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                 CafeBar.builder(TranslucentNavBarActivity.this)
                         .to(findViewById(R.id.coordinator))
                         .content(R.string.demo_text)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
+                        .swipeToDismiss(false)
                         .neutralText("Above")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -65,7 +65,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                         .floating(true)
                         .neutralText("Under")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -76,10 +76,10 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                 CafeBar.builder(TranslucentNavBarActivity.this)
                         .content(R.string.demo_text)
                         .floating(true)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .neutralText("Above")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -91,10 +91,10 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                         .to(findViewById(R.id.coordinator))
                         .content(R.string.demo_text)
                         .floating(true)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .neutralText("Above")
                         .neutralColor(Color.parseColor("#FF4081"))
-                        .build().show();
+                        .show();
             }
         });
 
@@ -104,7 +104,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
                         .customView(R.layout.cafebar_custom_layout)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
@@ -127,7 +127,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
                         .customView(R.layout.cafebar_custom_layout, true)
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
@@ -151,7 +151,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                 CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
                         .customView(R.layout.cafebar_custom_layout, true)
                         .to(findViewById(R.id.coordinator))
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
@@ -175,7 +175,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                 CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
                         .customView(R.layout.cafebar_custom_layout, true)
                         .to(findViewById(R.id.coordinator))
-                        .fitSystemWindow(true)
+                        .fitSystemWindow()
                         .floating(true)
                         .autoDismiss(false);
 

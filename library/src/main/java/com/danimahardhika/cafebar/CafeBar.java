@@ -18,6 +18,7 @@ package com.danimahardhika.cafebar;
  * limitations under the License.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -37,6 +38,8 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -439,8 +442,6 @@ public class CafeBar {
         }
 
         public Builder content(@StringRes int res) {
-            if (mContext == null) return this;
-
             mContent = mContext.getResources().getString(res);
             return this;
         }
@@ -552,13 +553,31 @@ public class CafeBar {
             return this;
         }
 
+        /**
+         * @deprecated use {{@link #fitSystemWindow()}} instead
+         */
+        @Deprecated
         public Builder fitSystemWindow(@BoolRes int res) {
-            mFitSystemWindow = mContext.getResources().getBoolean(res);
-            return this;
+            return fitSystemWindow();
         }
 
+        /**
+         * @deprecated use {{@link #fitSystemWindow()}} instead
+         */
+        @Deprecated
         public Builder fitSystemWindow(boolean fitSystemWindow) {
-            mFitSystemWindow = fitSystemWindow;
+            return fitSystemWindow();
+        }
+
+        public Builder fitSystemWindow() {
+            Window window = ((Activity) mContext).getWindow();
+            WindowManager.LayoutParams params = window.getAttributes();
+            int navigationBarHeight = CafeBarUtil.getNavigationBarHeight(mContext);
+
+            if ((params.flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) ==
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) {
+                mFitSystemWindow = navigationBarHeight > 0;
+            }
             return this;
         }
 
@@ -582,6 +601,11 @@ public class CafeBar {
             return this;
         }
 
+        public Builder buttonTypeface(@Nullable Typeface buttonTypeface) {
+            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = buttonTypeface;
+            return this;
+        }
+
         public Builder positiveColor(int positiveColor) {
             mPositiveColor = CafeBarUtil.getColor(mContext, positiveColor);
             return this;
@@ -594,6 +618,12 @@ public class CafeBar {
 
         public Builder neutralColor(int neutralColor) {
             mNeutralColor = CafeBarUtil.getColor(mContext, neutralColor);
+            return this;
+        }
+
+        public Builder buttonColor(int buttonColor) {
+            int color = CafeBarUtil.getColor(mContext, buttonColor);
+            mNeutralColor = mPositiveColor = mNegativeColor = color;
             return this;
         }
 
@@ -642,16 +672,20 @@ public class CafeBar {
             return this;
         }
 
+        public void show() {
+            build().show();
+        }
+
+        public CafeBar build() {
+            return new CafeBar(this);
+        }
+
         void longContent(boolean longContent) {
             mLongContent = longContent;
         }
 
         boolean longContent() {
             return mLongContent;
-        }
-
-        public CafeBar build() {
-            return new CafeBar(this);
         }
 
         @NonNull
@@ -700,7 +734,7 @@ public class CafeBar {
             return mShowShadow;
         }
 
-        boolean fitSystemWindow() {
+        boolean isFitSystemWindow() {
             return mFitSystemWindow;
         }
 

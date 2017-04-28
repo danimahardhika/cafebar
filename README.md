@@ -1,7 +1,7 @@
 # CafeBar
 [![](https://jitpack.io/v/danimahardhika/cafebar.svg)](https://jitpack.io/#danimahardhika/cafebar) [![Build Status](https://travis-ci.org/danimahardhika/cafebar.svg?branch=master)](https://travis-ci.org/danimahardhika/cafebar) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0f4b6a7685d54df59ad87fd3239fd9ed)](https://www.codacy.com/app/danimahardhika/cafebar?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=danimahardhika/cafebar&amp;utm_campaign=Badge_Grade) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 
-An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.0.0/sample-release.apk).
+An upgraded Snackbar for Android that provides more options and easy to use. Download sample apk from [here](https://github.com/danimahardhika/cafebar/releases/download/1.1.0/app-release.apk). Actually I made this for my own project, but decided to make it open source because a friend asked.
 
 <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
 

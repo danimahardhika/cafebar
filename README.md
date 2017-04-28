@@ -70,7 +70,8 @@ cafeBar.show();
 ```java
 CafeBar.builder(context)
     .content(R.string.text)
-    .fitSystemWindow(true)
+    //automatically determine if device has soft navigation bar and translucent navigation bar
+    .fitSystemWindow()
     .neutralText("Above NavBar")
     .neutralColor(Color.parseColor("#EEFF41"))
     .build().show();
@@ -115,6 +116,9 @@ Builder
 - `negativeColor()` &#8594; Negative action text color
 - `negativeTypeface()` &#8594; Custom typeface for negative text
 - `onNegative()` &#8594; Negative action callback
+- `buttonColor()` &#8594; Set all buttons color
+- `buttonTypeface()` &#8594; Set all buttons typeface
+- `show()` &#8594; Show CafeBar directly from builder
 - `build()` &#8594; Create CafeBar
 
 CafeBar

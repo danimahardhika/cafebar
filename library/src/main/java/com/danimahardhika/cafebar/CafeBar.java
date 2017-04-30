@@ -581,28 +581,65 @@ public class CafeBar {
             return this;
         }
 
+        public Builder typeface(@Nullable Typeface content, @Nullable Typeface button) {
+            mContentTypeface = content;
+            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = button;
+            return this;
+        }
+
+        public Builder typeface(String contentFontName, String buttonFontName) {
+            mContentTypeface = CafeBarUtil.getTypeface(mContext, contentFontName);
+            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = CafeBarUtil.getTypeface(mContext, buttonFontName);
+            return this;
+        }
+
         public Builder contentTypeface(@Nullable Typeface typeface) {
             mContentTypeface = typeface;
             return this;
         }
 
-        public Builder positiveTypeface(@Nullable Typeface positiveTypeface) {
-            mPositiveTypeface = positiveTypeface;
+        public Builder contentTypeface(String fontName) {
+            mContentTypeface = CafeBarUtil.getTypeface(mContext, fontName);
             return this;
         }
 
-        public Builder negativeTypeface(@Nullable Typeface negativeTypeface) {
-            mNegativeTypeface = negativeTypeface;
+        public Builder positiveTypeface(@Nullable Typeface typeface) {
+            mPositiveTypeface = typeface;
             return this;
         }
 
-        public Builder neutralTypeface(@Nullable Typeface neutralTypeface) {
-            mNeutralTypeface = neutralTypeface;
+        public Builder positiveTypeface(String fontName) {
+            mPositiveTypeface = CafeBarUtil.getTypeface(mContext, fontName);
             return this;
         }
 
-        public Builder buttonTypeface(@Nullable Typeface buttonTypeface) {
-            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = buttonTypeface;
+        public Builder negativeTypeface(@Nullable Typeface typeface) {
+            mNegativeTypeface = typeface;
+            return this;
+        }
+
+        public Builder negativeTypeface(String fontName) {
+            mNegativeTypeface = CafeBarUtil.getTypeface(mContext, fontName);
+            return this;
+        }
+
+        public Builder neutralTypeface(@Nullable Typeface typeface) {
+            mNeutralTypeface = typeface;
+            return this;
+        }
+
+        public Builder neutralTypeface(String fontName) {
+            mNeutralTypeface = CafeBarUtil.getTypeface(mContext, fontName);
+            return this;
+        }
+
+        public Builder buttonTypeface(@Nullable Typeface typeface) {
+            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = typeface;
+            return this;
+        }
+
+        public Builder buttonTypeface(String fontName) {
+            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = CafeBarUtil.getTypeface(mContext, fontName);
             return this;
         }
 

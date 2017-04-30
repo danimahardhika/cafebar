@@ -21,7 +21,7 @@ Add the dependency
 ```Gradle
 dependencies {
     //...
-    compile 'com.github.danimahardhika:cafebar:1.1.0'
+    compile 'com.github.danimahardhika:cafebar:1.1.2'
 }
 ```
 
@@ -37,6 +37,10 @@ CafeBar.builder(context)
     .theme(CafeBarTheme.LIGHT)
     .content(R.string.text)
     .neutralText("Action")
+    //You can parse string color
+    .neutralColor(Color.parseColor("#EEFF41"))
+    //Or use color resource
+    .neutralColor(R.color.neutralText)
     .show();
 ```
 
@@ -44,12 +48,10 @@ CafeBar.builder(context)
 ```java
 CafeBar.Builder builder = new CafeBar.Builder(context);
 ...
-
 CafeBar cafeBar = builder.build();
 
 View v = cafeBar.getCafeBarView();
 //Do something
-
 cafeBar.show();
 ```
 
@@ -58,11 +60,6 @@ cafeBar.show();
  CafeBar.builder(context)
     .content("some text")
     .floating(true)
-    .neutralText("Floating")
-    //You can parse string color
-    .neutralColor(Color.parseColor("#EEFF41"))
-    //Or use color resource
-    .neutralColor(R.color.neutralText)
     .show();
 ```
 
@@ -72,8 +69,6 @@ CafeBar.builder(context)
     .content(R.string.text)
     //automatically determine if device has soft navigation bar and translucent navigation bar
     .fitSystemWindow()
-    .neutralText("Above NavBar")
-    .neutralColor(Color.parseColor("#EEFF41"))
     .show();
 ```
 
@@ -84,7 +79,17 @@ CafeBar.builder(context)
     //Text color (content and buttons) automatically set
     .theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
     .content(R.string.text)
-    .neutralText(R.string.action)
+    .show();
+```
+
+#### Custom Font
+```java
+CafeBar.builder(context)
+    .content(R.string.text)
+    //You must place your font inside assets/fonts/ folder
+    .contentTypeface("RobotoMono-Regular.ttf")
+    //Or
+    .contentTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/RobotoMono-Regular.ttf");
     .show();
 ```
 
@@ -118,6 +123,7 @@ Builder
 - `onNegative()` &#8594; Negative action callback
 - `buttonColor()` &#8594; Set all buttons color
 - `buttonTypeface()` &#8594; Set all buttons typeface
+- `typeface()` &#8594; Set content and button typeface
 - `show()` &#8594; Show CafeBar directly from builder
 - `build()` &#8594; Create CafeBar
 

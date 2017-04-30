@@ -729,4 +729,14 @@ class CafeBarUtil {
             return color;
         }
     }
+
+    @Nullable
+    static Typeface getTypeface(@NonNull Context context, String fontName) {
+        try {
+            return Typeface.createFromAsset(context.getAssets(), "fonts/" +fontName);
+        } catch (Exception e) {
+            LogUtil.d(Log.getStackTraceString(e));
+        }
+        return null;
+    }
 }

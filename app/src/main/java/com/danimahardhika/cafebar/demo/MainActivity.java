@@ -2,7 +2,6 @@ package com.danimahardhika.cafebar.demo;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -362,13 +361,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 CafeBar.builder(MainActivity.this)
                         .content("With Custom Typeface")
-                        .contentTypeface(Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Regular.ttf"))
+                        .typeface("RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf")
                         .floating(true)
                         .gravity(CafeBarGravity.START)
                         .autoDismiss(false)
                         .neutralText("Dismiss")
                         .neutralColor(Color.parseColor("#EEFF41"))
-                        .neutralTypeface(Typeface.createFromAsset(getAssets(), "fonts/RobotoMono-Bold.ttf"))
                         .show();
             }
         });

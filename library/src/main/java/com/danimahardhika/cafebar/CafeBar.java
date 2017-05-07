@@ -796,7 +796,7 @@ public class CafeBar {
             return mIcon;
         }
 
-        boolean filterIconColor() {
+        boolean tintIcon() {
             return mTintIcon;
         }
 

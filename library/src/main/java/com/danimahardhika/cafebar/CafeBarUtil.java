@@ -158,7 +158,7 @@ class CafeBarUtil {
                     builder.context(),
                     builder.icon(),
                     titleColor,
-                    builder.filterIconColor());
+                    builder.tintIcon());
         }
 
         //Creating TextView for content as childView

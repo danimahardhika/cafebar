@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.BoolRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
@@ -393,7 +394,7 @@ public class CafeBar {
         private boolean mFitSystemWindow = false;
         private boolean mFloating = false;
         private boolean mAdjustCustomView = false;
-        private boolean mFilterIconColor = true;
+        private boolean mTintIcon = true;
         private boolean mSwipeToDismiss = true;
 
         private Typeface mContentTypeface;
@@ -490,21 +491,21 @@ public class CafeBar {
             return this;
         }
 
-        public Builder icon(@Nullable Drawable icon, boolean filterIconColor) {
+        public Builder icon(@Nullable Drawable icon, boolean tintIcon) {
             mIcon = icon;
-            mFilterIconColor = filterIconColor;
+            mTintIcon = tintIcon;
             return this;
         }
 
-        public Builder icon(@Nullable Bitmap icon, boolean filterIconColor) {
+        public Builder icon(@Nullable Bitmap icon, boolean tintIcon) {
             mIcon = CafeBarUtil.toDrawable(mContext, icon);
-            mFilterIconColor = filterIconColor;
+            mTintIcon = tintIcon;
             return this;
         }
 
-        public Builder icon(@DrawableRes int res, boolean filterIconColor) {
+        public Builder icon(@DrawableRes int res, boolean tintIcon) {
             mIcon = CafeBarUtil.getDrawable(mContext, res);
-            mFilterIconColor = filterIconColor;
+            mTintIcon = tintIcon;
             return this;
         }
 
@@ -570,13 +571,19 @@ public class CafeBar {
         }
 
         public Builder fitSystemWindow() {
-            Window window = ((Activity) mContext).getWindow();
+            Activity activity = (Activity) mContext;
+            Window window = activity.getWindow();
             WindowManager.LayoutParams params = window.getAttributes();
             int navigationBarHeight = CafeBarUtil.getNavigationBarHeight(mContext);
 
+            boolean isInMultiWindowMode = false;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                isInMultiWindowMode = activity.isInMultiWindowMode();
+            }
+
             if ((params.flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) ==
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) {
-                mFitSystemWindow = navigationBarHeight > 0;
+                mFitSystemWindow = navigationBarHeight > 0 && !isInMultiWindowMode;
             }
             return this;
         }
@@ -790,7 +797,7 @@ public class CafeBar {
         }
 
         boolean filterIconColor() {
-            return mFilterIconColor;
+            return mTintIcon;
         }
 
         @NonNull

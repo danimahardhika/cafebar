@@ -169,7 +169,18 @@ class CafeBarUtil {
         content.setTextColor(titleColor);
         content.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.context().getResources()
                 .getDimension(R.dimen.cafebar_content_text));
-        content.setText(builder.content());
+
+        if (builder.contentTypeface() != null) {
+            LogUtil.d("content has custom typeface");
+            content.setTypeface(builder.contentTypeface());
+        }
+
+        if (builder.spannableBuilder() != null) {
+            content.setText(builder.spannableBuilder(), TextView.BufferType.SPANNABLE);
+        } else {
+            content.setText(builder.content());
+        }
+
         content.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -184,11 +195,6 @@ class CafeBarUtil {
                     .getDimensionPixelSize(R.dimen.cafebar_floating_min_width));
             content.setMaxWidth(builder.context().getResources()
                     .getDimensionPixelSize(R.dimen.cafebar_floating_max_width));
-        }
-
-        if (builder.contentTypeface() != null) {
-            LogUtil.d("content has custom typeface");
-            content.setTypeface(builder.contentTypeface());
         }
 
         int side = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
@@ -571,7 +577,12 @@ class CafeBarUtil {
         if (builder.contentTypeface() != null) {
             textView.setTypeface(builder.contentTypeface());
         }
-        textView.setText(builder.content());
+
+        if (builder.spannableBuilder() != null) {
+            textView.setText(builder.spannableBuilder(), TextView.BufferType.SPANNABLE);
+        } else {
+            textView.setText(builder.content());
+        }
 
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);

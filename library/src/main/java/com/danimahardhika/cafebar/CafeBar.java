@@ -37,6 +37,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -408,6 +409,8 @@ public class CafeBar {
         private String mNegativeText = null;
         private String mNeutralText = null;
 
+        private SpannableStringBuilder mSpannableBuilder = null;
+
         private CafeBarCallback mPositiveCallback;
         private CafeBarCallback mNegativeCallback;
         private CafeBarCallback mNeutralCallback;
@@ -449,6 +452,11 @@ public class CafeBar {
 
         public Builder content(@NonNull String content) {
             mContent = content;
+            return this;
+        }
+
+        public Builder content(@NonNull SpannableStringBuilder spannableBuilder) {
+            mSpannableBuilder = spannableBuilder;
             return this;
         }
 
@@ -803,6 +811,11 @@ public class CafeBar {
         @NonNull
         String content() {
             return mContent;
+        }
+
+        @Nullable
+        SpannableStringBuilder spannableBuilder() {
+            return mSpannableBuilder;
         }
 
         int maxLines() {

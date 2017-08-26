@@ -128,7 +128,7 @@ Builder
 CafeBar
 - `make()` &#8594; Create CafeBar
 - `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored.
-- `getCafeBarView()` &#8594; Get root view of CafeBar, default is `LinearLayout`.
+- `getCafeBarView()` &#8594; Get root view of CafeBar, default is `FrameLayout`.
 - `show()` &#8594; Show CafeBar
 - `dismiss()` &#8594; Dismiss CafeBar
 

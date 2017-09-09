@@ -126,6 +126,12 @@
             android:text="Floating With Custom View Adjusted" />
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/spannable_typeface"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Spannable Typeface" />
+
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/custom_typeface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +16,9 @@ import com.danimahardhika.cafebar.CafeBarCallback;
 import com.danimahardhika.cafebar.CafeBarDuration;
 import com.danimahardhika.cafebar.CafeBarGravity;
 import com.danimahardhika.cafebar.CafeBarTheme;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -165,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //--- You can use custom theme in release 1.0.7
                 //Text color (content and buttons) automatically set
-                builder.theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
+                builder.theme(CafeBarTheme.Custom(Color.parseColor("#F44336")));
 
                 CafeBar cafeBar = builder.build();
                 //--- Old method
@@ -352,6 +357,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 cafeBar.show();
+            }
+        });
+
+        //Spannable Typeface
+        findViewById(R.id.spannable_typeface).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String join1 = "With";
+                String join2 ="Spannable Typeface";
+                SpannableStringBuilder builder = new SpannableStringBuilder();
+                builder.append(join1)
+                        .append(" ")
+                        .append(join2);
+                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(
+                        TypefaceUtils.load(MainActivity.this.getAssets(), "fonts/RobotoMono-Bold.ttf"));
+                builder.setSpan(typefaceSpan, join1.length() + 1, builder.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                CafeBar.builder(MainActivity.this)
+                        .content(builder)
+                        .contentTypeface("RobotoMono-Regular.ttf")
+                        .floating(true)
+                        .gravity(CafeBarGravity.START)
+                        .show();
             }
         });
 

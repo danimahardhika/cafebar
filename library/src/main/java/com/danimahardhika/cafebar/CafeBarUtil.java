@@ -11,7 +11,7 @@ package com.danimahardhika.cafebar;
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed getTo in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -21,6 +21,7 @@ package com.danimahardhika.cafebar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -66,24 +67,23 @@ class CafeBarUtil {
 
         viewGroup.setClickable(true);
 
-        if (!builder.adjustCustomView()) {
-            LogUtil.d("adjustCustomView = false, leave custom view as it is");
+        if (!builder.isAdjustCustomView()) {
+            LogUtil.d("isAdjustCustomView = false, leave custom view as it is");
             return;
         }
 
-        LogUtil.d("CafeBar has customView adjusting padding, setup content, button etc ignored");
+        LogUtil.d("CafeBar has getCustomView adjusting padding, setup content, button etc ignored");
 
         int left = view.getPaddingLeft();
         int top = view.getPaddingTop();
         int right = view.getPaddingRight();
         int bottom = view.getPaddingBottom();
 
-        boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("CafeBar tabletMode: " +tabletMode);
+        boolean tabletMode = builder.getContext().getResources().getBoolean(R.bool.cafebar_tablet_mode);
 
-        if (builder.isFitSystemWindow() && !builder.floating()) {
-            Configuration configuration = builder.context().getResources().getConfiguration();
-            int navBar = getNavigationBarHeight(builder.context());
+        if (builder.isFitSystemWindow() && !builder.isFloating()) {
+            Configuration configuration = builder.getContext().getResources().getConfiguration();
+            int navBar = getNavigationBarHeight(builder.getContext());
 
             if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 viewGroup.setPadding(left, top, right, (bottom + navBar));
@@ -96,7 +96,7 @@ class CafeBarUtil {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             if (viewGroup.getChildAt(i) instanceof TextView) {
                 index = i;
-                LogUtil.d("CafeBar with customView found textview at index " +i);
+                LogUtil.d("CafeBar with getCustomView found textview at index " +i);
                 LogUtil.d("CafeBar always consider fist textview found as content");
                 break;
             }
@@ -106,33 +106,33 @@ class CafeBarUtil {
 
         TextView content = (TextView) viewGroup.getChildAt(index);
 
-        if (tabletMode || builder.floating()) {
+        if (tabletMode || builder.isFloating()) {
             ViewGroup.LayoutParams params = content.getLayoutParams();
             params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
             content.setLayoutParams(params);
 
-            content.setMinWidth(builder.context().getResources()
+            content.setMinWidth(builder.getContext().getResources()
                     .getDimensionPixelSize(R.dimen.cafebar_floating_min_width));
-            content.setMaxWidth(builder.context().getResources()
+            content.setMaxWidth(builder.getContext().getResources()
                     .getDimensionPixelSize(R.dimen.cafebar_floating_max_width));
         }
     }
 
     @NonNull
     static View getBaseCafeBarView(@NonNull CafeBar.Builder builder) {
-        int color = builder.theme().getColor();
-        int titleColor = builder.theme().getTitleColor();
+        int color = builder.getTheme().getColor();
+        int titleColor = builder.getTheme().getTitleColor();
 
-        CafeBarTheme.Custom customTheme = builder.customTheme();
+        CafeBarTheme.Custom customTheme = builder.getTheme();
         if (customTheme != null) {
             color = customTheme.getColor();
             titleColor = customTheme.getTitleColor();
         }
 
         //Creating LinearLayout as rootView
-        LinearLayout root = new LinearLayout(builder.context());
+        LinearLayout root = new LinearLayout(builder.getContext());
         root.setId(R.id.cafebar_root);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setGravity(Gravity.CENTER_VERTICAL);
@@ -142,8 +142,8 @@ class CafeBarUtil {
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         root.setClickable(true);
 
-        //Creating another LinearLayout for content container
-        LinearLayout contentBase = new LinearLayout(builder.context());
+        //Creating another LinearLayout for getContent container
+        LinearLayout contentBase = new LinearLayout(builder.getContext());
         contentBase.setId(R.id.cafebar_content_base);
         contentBase.setOrientation(LinearLayout.HORIZONTAL);
         contentBase.setGravity(Gravity.CENTER_VERTICAL);
@@ -152,33 +152,31 @@ class CafeBarUtil {
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
         Drawable drawable = null;
-        if (builder.icon() != null) {
-            LogUtil.d("CafeBar has custom icon");
+        if (builder.getIcon() != null) {
             drawable = getResizedDrawable(
-                    builder.context(),
-                    builder.icon(),
+                    builder.getContext(),
+                    builder.getIcon(),
                     titleColor,
-                    builder.tintIcon());
+                    builder.isTintIcon());
         }
 
-        //Creating TextView for content as childView
-        TextView content = new TextView(builder.context());
+        //Creating TextView for getContent as childView
+        TextView content = new TextView(builder.getContext());
         content.setId(R.id.cafebar_content);
-        content.setMaxLines(builder.maxLines());
+        content.setMaxLines(builder.getMaxLines());
         content.setEllipsize(TextUtils.TruncateAt.END);
         content.setTextColor(titleColor);
-        content.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.context().getResources()
+        content.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.getContext().getResources()
                 .getDimension(R.dimen.cafebar_content_text));
 
-        if (builder.contentTypeface() != null) {
-            LogUtil.d("content has custom typeface");
-            content.setTypeface(builder.contentTypeface());
+        if (builder.getContentTypeface() != null) {
+            content.setTypeface(builder.getContentTypeface());
         }
 
-        if (builder.spannableBuilder() != null) {
-            content.setText(builder.spannableBuilder(), TextView.BufferType.SPANNABLE);
+        if (builder.getSpannableStringBuilder() != null) {
+            content.setText(builder.getSpannableStringBuilder(), TextView.BufferType.SPANNABLE);
         } else {
-            content.setText(builder.content());
+            content.setText(builder.getContent());
         }
 
         content.setLayoutParams(new LinearLayout.LayoutParams(
@@ -186,54 +184,41 @@ class CafeBarUtil {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         content.setGravity(Gravity.CENTER_VERTICAL);
 
-        boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        if (tabletMode || builder.floating()) {
+        boolean tabletMode = builder.getContext().getResources().getBoolean(R.bool.cafebar_tablet_mode);
+        if (tabletMode || builder.isFloating()) {
             content.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
-            content.setMinWidth(builder.context().getResources()
+            content.setMinWidth(builder.getContext().getResources()
                     .getDimensionPixelSize(R.dimen.cafebar_floating_min_width));
-            content.setMaxWidth(builder.context().getResources()
+            content.setMaxWidth(builder.getContext().getResources()
                     .getDimensionPixelSize(R.dimen.cafebar_floating_max_width));
         }
 
-        int side = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
-        int top = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
+        int side = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
+        int top = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
 
         if (drawable != null) {
             content.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             content.setCompoundDrawablePadding(top);
         }
 
-        //Try to measure height of content to determine if it has more than 1 line
+        boolean multiLines = isContentMultiLines(builder);
+        boolean containsPositive = builder.getPositiveText() != null;
+        boolean containsNegative = builder.getNegativeText() != null;
+        boolean longNeutralAction = isLongAction(builder.getNeutralText());
 
-        Point point = getMeasuredContentSize(builder);
-        int defaultHeight = getDefaultContentHeight(builder.context(), builder.contentTypeface());
-        LogUtil.d("measured content height for 1 line: " +defaultHeight);
-
-        boolean moreThanOneLine = point.y > defaultHeight;
-        boolean containsPositive = builder.positiveText() != null;
-        boolean containsNegative = builder.negativeText() != null;
-        boolean longNeutralAction = isLongAction(builder.neutralText());
-
-        if (moreThanOneLine || containsPositive || containsNegative || longNeutralAction) {
-            LogUtil.d("More than one line: " +moreThanOneLine);
-            LogUtil.d("Contains positive button: " +containsPositive);
-            LogUtil.d("Contains negative button: " +containsNegative);
-            LogUtil.d("Long neutral action: " +longNeutralAction);
+        if (multiLines || containsPositive || containsNegative || longNeutralAction) {
             top = side;
             builder.longContent(true);
         }
 
         root.setPadding(side, top, side, top);
 
-        LogUtil.d("fitSystemWindow: " +builder.isFitSystemWindow());
-        if (builder.positiveText() == null && builder.negativeText() == null) {
-            LogUtil.d("CafeBar not contains positive and negative button");
-
-            if (builder.isFitSystemWindow() && !builder.floating()) {
-                Configuration configuration = builder.context().getResources().getConfiguration();
-                int navBar = getNavigationBarHeight(builder.context());
+        if (builder.getPositiveText() == null && builder.getNegativeText() == null) {
+            if (builder.isFitSystemWindow() && !builder.isFloating()) {
+                Configuration configuration = builder.getContext().getResources().getConfiguration();
+                int navBar = getNavigationBarHeight(builder.getContext());
 
                 if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     root.setPadding(side, top, side, (top + navBar));
@@ -242,20 +227,18 @@ class CafeBarUtil {
                 }
             }
 
-            //Adding content to container
+            //Adding getContent getTo container
             contentBase.addView(content);
 
-            //Adding childView to rootView
+            //Adding childView getTo rootView
             root.addView(contentBase);
 
             //Returning rootView
             return root;
         }
 
-        LogUtil.d("CafeBar contains positive or negative button");
-
         //Creating another linear layout for button container
-        LinearLayout buttonBase = new LinearLayout(builder.context());
+        LinearLayout buttonBase = new LinearLayout(builder.getContext());
         buttonBase.setId(R.id.cafebar_button_base);
         buttonBase.setOrientation(LinearLayout.HORIZONTAL);
         buttonBase.setGravity(Gravity.END);
@@ -265,70 +248,65 @@ class CafeBarUtil {
 
         //Adding button
 
-        String neutralText = builder.neutralText();
+        String neutralText = builder.getNeutralText();
         if (neutralText != null) {
-            LogUtil.d("builder has neutral button");
-            TextView neutral = getActionView(builder, neutralText, builder.neutralColor());
+            TextView neutral = getActionView(builder, neutralText, builder.getNeutralColor());
             neutral.setId(R.id.cafebar_button_neutral);
 
-            if (builder.positiveTypeface() != null) {
-                LogUtil.d("neutral has custom typeface");
-                neutral.setTypeface(builder.neutralTypeface());
+            if (builder.getPositiveTypeface() != null) {
+                neutral.setTypeface(builder.getNeutralTypeface());
             }
 
             buttonBase.addView(neutral);
         }
 
-        String negativeText = builder.negativeText();
+        String negativeText = builder.getNegativeText();
         if (negativeText != null) {
-            LogUtil.d("builder has negative button");
-            TextView negative = getActionView(builder, negativeText, builder.negativeColor());
+            TextView negative = getActionView(builder, negativeText, builder.getNegativeColor());
             negative.setId(R.id.cafebar_button_negative);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) negative.getLayoutParams();
             params.setMargins(
-                    params.leftMargin + builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin),
+                    params.leftMargin + builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin),
                     params.topMargin,
                     params.rightMargin,
                     params.bottomMargin);
 
-            if (builder.positiveTypeface() != null) {
-                LogUtil.d("negative has custom typeface");
-                negative.setTypeface(builder.negativeTypeface());
+            if (builder.getPositiveTypeface() != null) {
+                negative.setTypeface(builder.getNegativeTypeface());
             }
 
             buttonBase.addView(negative);
         }
 
-        String positiveText = builder.positiveText();
+        String positiveText = builder.getPositiveText();
         if (positiveText != null) {
-            LogUtil.d("builder has positive button");
-            TextView positive = getActionView(builder, positiveText, builder.positiveColor());
+            int positiveColor = CafeBarUtil.getAccentColor(builder.getContext(), builder.getPositiveColor());
+            TextView positive = getActionView(builder, positiveText, positiveColor);
             positive.setId(R.id.cafebar_button_positive);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) positive.getLayoutParams();
             params.setMargins(
-                    params.leftMargin + builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin),
+                    params.leftMargin + builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin),
                     params.topMargin,
                     params.rightMargin,
                     params.bottomMargin);
 
-            if (builder.positiveTypeface() != null) {
-                LogUtil.d("positive has custom typeface");
-                positive.setTypeface(builder.positiveTypeface());
+            if (builder.getPositiveTypeface() != null) {
+                positive.setTypeface(builder.getPositiveTypeface());
             }
 
             buttonBase.addView(positive);
         }
 
         //Adjust padding
-        int buttonPadding = builder.context().getResources().getDimensionPixelSize(
+        int buttonPadding = builder.getContext().getResources().getDimensionPixelSize(
                 R.dimen.cafebar_button_padding);
         root.setPadding(side, top, (side - buttonPadding), (top - buttonPadding));
 
-        if (builder.isFitSystemWindow() && !builder.floating()) {
-            Configuration configuration = builder.context().getResources().getConfiguration();
-            int navBar = getNavigationBarHeight(builder.context());
+        if (builder.isFitSystemWindow() && !builder.isFloating()) {
+            Configuration configuration = builder.getContext().getResources().getConfiguration();
+            int navBar = getNavigationBarHeight(builder.getContext());
 
             if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 root.setPadding(side, top, (side - buttonPadding), (top - buttonPadding + navBar));
@@ -337,14 +315,14 @@ class CafeBarUtil {
             }
         }
 
-        //Adding content to container
+        //Adding getContent getTo container
         content.setPadding(0, 0, buttonPadding, 0);
         contentBase.addView(content);
 
-        //Adding childView to rootView
+        //Adding childView getTo rootView
         root.addView(contentBase);
 
-        //Adding button container to root
+        //Adding button container getTo root
         root.addView(buttonBase);
 
         //Returning rootView
@@ -354,13 +332,13 @@ class CafeBarUtil {
     @Nullable
     static Snackbar getBaseSnackBar(@NonNull View cafeBarLayout,
                                     @NonNull CafeBar.Builder builder) {
-        View view = builder.to();
+        View view = builder.getTo();
         if (view == null) {
-            view = ((Activity) builder.context()).getWindow().getDecorView().findViewById(android.R.id.content);
+            view = ((Activity) builder.getContext()).getWindow().getDecorView().findViewById(android.R.id.content);
         }
 
-        Snackbar snackBar = Snackbar.make(view, "", builder.autoDismiss() ?
-                builder.duration() : Snackbar.LENGTH_INDEFINITE);
+        Snackbar snackBar = Snackbar.make(view, "", builder.isAutoDismiss() ?
+                builder.getDuration() : Snackbar.LENGTH_INDEFINITE);
         Snackbar.SnackbarLayout snackBarLayout = (Snackbar.SnackbarLayout) snackBar.getView();
         snackBarLayout.setPadding(0, 0, 0, 0);
         snackBarLayout.setBackgroundColor(Color.TRANSPARENT);
@@ -379,8 +357,7 @@ class CafeBarUtil {
                 snackBarLayout.setLayoutParams(snackBarParams);
             }
         } catch (ClassCastException e) {
-            LogUtil.d("target view must be coordinator layout");
-            LogUtil.d(Log.getStackTraceString(e));
+            LogUtil.e(Log.getStackTraceString(e));
             return null;
         }
 
@@ -392,25 +369,24 @@ class CafeBarUtil {
                 android.support.design.R.id.snackbar_text);
         if (textView != null) textView.setVisibility(View.INVISIBLE);
 
-        boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("CafeBar tabletMode: " +tabletMode);
-        if (tabletMode || builder.floating()) {
-            int shadow = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_shadow_around);
-            int padding = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
+        boolean tabletMode = builder.getContext().getResources().getBoolean(R.bool.cafebar_tablet_mode);
+        if (tabletMode || builder.isFloating()) {
+            int shadow = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_shadow_around);
+            int padding = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
 
-            CardView cardView = (CardView) View.inflate(builder.context(), R.layout.cafebar_floating_base, null);
+            CardView cardView = (CardView) View.inflate(builder.getContext(), R.layout.cafebar_floating_base, null);
             Snackbar.SnackbarLayout.LayoutParams params = new Snackbar.SnackbarLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = builder.gravity().getGravity();
+            params.gravity = builder.getGravity().getGravity();
 
-            int bottom = builder.floating() ? padding : 0;
+            int bottom = builder.isFloating() ? padding : 0;
             snackBarLayout.setClipToPadding(false);
             snackBarLayout.setPadding(padding, shadow, padding, bottom);
 
-            if (builder.isFitSystemWindow() && builder.floating()) {
-                Configuration configuration = builder.context().getResources().getConfiguration();
-                int navBar = getNavigationBarHeight(builder.context());
+            if (builder.isFitSystemWindow() && builder.isFloating()) {
+                Configuration configuration = builder.getContext().getResources().getConfiguration();
+                int navBar = getNavigationBarHeight(builder.getContext());
 
                 if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     snackBarLayout.setPadding(padding, shadow, padding, (bottom + navBar));
@@ -422,8 +398,8 @@ class CafeBarUtil {
             cardView.setLayoutParams(params);
             cardView.setClickable(true);
 
-            if (builder.showShadow()) {
-                cardView.setCardElevation(builder.context().getResources().getDimension(R.dimen.cafebar_shadow_around));
+            if (builder.isShowShadow()) {
+                cardView.setCardElevation(builder.getContext().getResources().getDimension(R.dimen.cafebar_shadow_around));
             }
 
             cardView.addView(cafeBarLayout);
@@ -431,17 +407,17 @@ class CafeBarUtil {
             return snackBar;
         }
 
-        LinearLayout root = new LinearLayout(builder.context());
+        LinearLayout root = new LinearLayout(builder.getContext());
         root.setOrientation(LinearLayout.VERTICAL);
         root.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        if (builder.showShadow()) {
-            View shadow = new View(builder.context());
+        if (builder.isShowShadow()) {
+            View shadow = new View(builder.getContext());
             shadow.setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    builder.context().getResources().getDimensionPixelSize(
+                    builder.getContext().getResources().getDimensionPixelSize(
                             R.dimen.cafebar_shadow_top)));
             shadow.setBackgroundResource(R.drawable.cafebar_shadow_top);
             root.addView(shadow);
@@ -456,24 +432,18 @@ class CafeBarUtil {
     static TextView getActionView(@NonNull CafeBar.Builder builder, @NonNull String action, int color) {
         boolean longAction = isLongAction(action);
         int res = R.layout.cafebar_action_button_dark;
-        if (builder.theme() == CafeBarTheme.LIGHT) {
+
+        CafeBarTheme.Custom customTheme = builder.getTheme();
+        int titleColor = customTheme.getTitleColor();
+        boolean dark = titleColor != Color.WHITE;
+        if (dark) {
             res = R.layout.cafebar_action_button;
         }
 
-        CafeBarTheme.Custom customTheme = builder.customTheme();
-        if (customTheme != null) {
-            int titleColor = customTheme.getTitleColor();
-            if (titleColor != Color.WHITE) {
-                res = R.layout.cafebar_action_button;
-            }
-        }
-
-        LogUtil.d("getting action view, longAction: " +longAction);
-
-        int padding = builder.context().getResources().getDimensionPixelSize(
+        int padding = builder.getContext().getResources().getDimensionPixelSize(
                 R.dimen.cafebar_button_padding);
 
-        TextView button = (TextView) View.inflate(builder.context(), res, null);
+        TextView button = (TextView) View.inflate(builder.getContext(), res, null);
         button.setText(action.toUpperCase(Locale.getDefault()));
         button.setMaxLines(1);
         button.setEllipsize(TextUtils.TruncateAt.END);
@@ -484,9 +454,9 @@ class CafeBarUtil {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        int side = builder.context().getResources().getDimensionPixelSize(
+        int side = builder.getContext().getResources().getDimensionPixelSize(
                 R.dimen.cafebar_content_padding_side);
-        int margin = builder.context().getResources().getDimensionPixelSize(
+        int margin = builder.getContext().getResources().getDimensionPixelSize(
                 R.dimen.cafebar_button_margin_start);
         params.setMargins(margin, 0, 0, 0);
 
@@ -494,7 +464,7 @@ class CafeBarUtil {
             params.setMargins(0, (side - padding), 0, 0);
         }
 
-        if (builder.positiveText() != null || builder.negativeText() != null) {
+        if (builder.getPositiveText() != null || builder.getNegativeText() != null) {
             longAction = true;
             params.setMargins(0, (side - padding), 0, 0);
         } else {
@@ -504,41 +474,42 @@ class CafeBarUtil {
         button.setLayoutParams(params);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            boolean dark = builder.theme() == CafeBarTheme.DARK || builder.theme() == CafeBarTheme.CLEAR_BLACK;
             button.setBackgroundResource(dark ? R.drawable.cafebar_action_button_selector_dark :
                     R.drawable.cafebar_action_button_selector);
             return button;
         }
 
         TypedValue outValue = new TypedValue();
-        builder.context().getTheme().resolveAttribute(longAction ?
+        builder.getContext().getTheme().resolveAttribute(longAction ?
                         R.attr.selectableItemBackground : R.attr.selectableItemBackgroundBorderless,
                 outValue, true);
         button.setBackgroundResource(outValue.resourceId);
         return button;
     }
 
-    static Point getMeasuredContentSize(@NonNull CafeBar.Builder builder) {
+    static boolean isContentMultiLines(@NonNull CafeBar.Builder builder) {
         DisplayMetrics metrics = new DisplayMetrics();
-        ((Activity) builder.context()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        ((Activity) builder.getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        boolean tabletMode = builder.context().getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        int padding = (builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side) * 2);
+        boolean tabletMode = builder.getContext().getResources().getBoolean(R.bool.cafebar_tablet_mode);
+        int padding = (builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side) * 2);
 
-        if (builder.neutralText() != null && builder.negativeText() == null && builder.positiveText() == null &&
-                !isLongAction(builder.neutralText())) {
-            padding += builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin_start);
+        if (builder.getNeutralText() != null && builder.getNegativeText() == null && builder.getPositiveText() == null &&
+                !isLongAction(builder.getNeutralText())) {
+            padding += builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_button_margin_start);
 
-            TextView action = new TextView(builder.context());
-            action.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.context().getResources()
+            int actionPadding = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_button_padding);
+            TextView action = new TextView(builder.getContext());
+            action.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.getContext().getResources()
                     .getDimension(R.dimen.cafebar_content_text));
-            if (builder.neutralTypeface() != null) {
-                action.setTypeface(builder.contentTypeface());
+            if (builder.getNeutralTypeface() != null) {
+                action.setTypeface(builder.getContentTypeface());
             }
-            action.setText(builder.neutralText().substring(0,
-                    builder.neutralText().length() > 10 ? 10 : builder.neutralText().length()));
+            action.setPadding(actionPadding, 0, actionPadding, 0);
+            action.setText(builder.getNeutralText().substring(0,
+                    builder.getNeutralText().length() > 10 ? 10 : builder.getNeutralText().length()));
 
-            int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(500, View.MeasureSpec.AT_MOST);
+            int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.AT_MOST);
             int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             action.measure(widthMeasureSpec, heightMeasureSpec);
 
@@ -546,67 +517,36 @@ class CafeBarUtil {
             padding += action.getMeasuredWidth();
         }
 
-        if (builder.icon() != null) {
-            int icon = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_icon_size);
-            icon += builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
-
-            LogUtil.d("measured icon width: " +icon);
+        if (builder.getIcon() != null) {
+            int icon = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_icon_size);
+            icon += builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
             padding += icon;
         }
 
-        int minWidth = 0;
-        int maxWidth = 0;
-        if (builder.floating() || tabletMode) {
-            padding += builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
-            minWidth = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_min_width);
-            maxWidth = builder.context().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_max_width);
+        if (builder.isFloating() || tabletMode) {
+            padding += builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
         }
 
-        int width = metrics.widthPixels - padding;
-
-        //Checking if target width < minWidth
-        if (width < minWidth) {
-            width = minWidth;
-        } else if (width > maxWidth && maxWidth > 0) {
-            width = maxWidth;
-        }
-
-        TextView textView = new TextView(builder.context());
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.context().getResources()
+        TextView textView = new TextView(builder.getContext());
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.getContext().getResources()
                 .getDimension(R.dimen.cafebar_content_text));
-        if (builder.contentTypeface() != null) {
-            textView.setTypeface(builder.contentTypeface());
+        textView.setPadding(padding, 0, 0, 0);
+        if (builder.getContentTypeface() != null) {
+            textView.setTypeface(builder.getContentTypeface());
         }
 
-        if (builder.spannableBuilder() != null) {
-            textView.setText(builder.spannableBuilder(), TextView.BufferType.SPANNABLE);
+        if (builder.getSpannableStringBuilder() != null) {
+            textView.setText(builder.getSpannableStringBuilder(), TextView.BufferType.SPANNABLE);
         } else {
-            textView.setText(builder.content());
+            textView.setText(builder.getContent());
         }
 
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST);
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.AT_MOST);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
 
-        LogUtil.d("minWidth: " +minWidth);
-        LogUtil.d("maxWidth: " +maxWidth);
-        LogUtil.d("target width: " +width);
-        LogUtil.d("measured width: " +textView.getMeasuredWidth());
-        LogUtil.d("measured height: " +textView.getMeasuredHeight());
-        return new Point(textView.getMeasuredWidth(), textView.getMeasuredHeight());
-    }
-
-    static int getDefaultContentHeight(@NonNull Context context, @Nullable Typeface typeface) {
-        TextView textView = new TextView(context);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources()
-                .getDimension(R.dimen.cafebar_content_text));
-        textView.setTypeface(typeface);
-        textView.setText("a");
-
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.AT_MOST);
-        int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        textView.measure(widthMeasureSpec, heightMeasureSpec);
-        return textView.getMeasuredHeight();
+        LogUtil.d("line count: " +textView.getLineCount());
+        return textView.getLineCount() > 1;
     }
 
     @Nullable
@@ -631,20 +571,19 @@ class CafeBarUtil {
 
     @Nullable
     private static Drawable getResizedDrawable(@NonNull Context context, @Nullable Drawable drawable,
-                                               int color, boolean filter) {
+                                               int color, boolean tint) {
         try {
             if (drawable == null) {
                 LogUtil.d("drawable: null");
                 return null;
             }
 
-            if (filter) {
+            if (tint) {
                 drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
                 drawable.mutate();
             }
 
             int size = context.getResources().getDimensionPixelSize(R.dimen.cafebar_icon_size);
-
             Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
                     drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
@@ -654,7 +593,7 @@ class CafeBarUtil {
             return new BitmapDrawable(context.getResources(),
                     Bitmap.createScaledBitmap(bitmap, size, size, true));
         } catch (Exception | OutOfMemoryError e) {
-            LogUtil.d(Log.getStackTraceString(e));
+            LogUtil.e(Log.getStackTraceString(e));
             return null;
         }
     }
@@ -701,7 +640,7 @@ class CafeBarUtil {
                 size.x = (Integer)     Display.class.getMethod("getRawWidth").invoke(display);
                 size.y = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
             } catch (Exception e) {
-                LogUtil.d(Log.getStackTraceString(e));
+                LogUtil.e(Log.getStackTraceString(e));
             }
         }
         return size;
@@ -711,6 +650,18 @@ class CafeBarUtil {
         return action != null && action.length() > 10;
     }
 
+    static int getAccentColor(Context context, int defaultColor) {
+        if (context == null) {
+            LogUtil.e("getAccentColor() context is null");
+            return defaultColor;
+        }
+
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.colorAccent, typedValue, true);
+        return typedValue.data;
+    }
+
     static int getTitleTextColor(@ColorInt int color) {
         double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
         return (darkness < 0.35) ? getDarkerColor(color) : Color.WHITE;
@@ -718,7 +669,7 @@ class CafeBarUtil {
 
     static int getSubTitleTextColor(@ColorInt int color) {
         int titleColor = getTitleTextColor(color);
-        int alpha2 = Math.round(Color.alpha(titleColor) * 0.6f);
+        int alpha2 = Math.round(Color.alpha(titleColor) * 0.7f);
         int red = Color.red(titleColor);
         int green = Color.green(titleColor);
         int blue = Color.blue(titleColor);
@@ -736,7 +687,7 @@ class CafeBarUtil {
         try {
             return ContextCompat.getColor(context, color);
         } catch (Exception e) {
-            LogUtil.d(Log.getStackTraceString(e));
+            LogUtil.e(Log.getStackTraceString(e));
             return color;
         }
     }
@@ -746,7 +697,7 @@ class CafeBarUtil {
         try {
             return Typeface.createFromAsset(context.getAssets(), "fonts/" +fontName);
         } catch (Exception e) {
-            LogUtil.d(Log.getStackTraceString(e));
+            LogUtil.e(Log.getStackTraceString(e));
         }
         return null;
     }

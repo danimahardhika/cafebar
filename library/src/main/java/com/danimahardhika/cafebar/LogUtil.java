@@ -11,7 +11,7 @@ package com.danimahardhika.cafebar;
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed getTo in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -27,8 +27,13 @@ class LogUtil {
 
     private static final String TAG = "CafeBar";
 
-    public static void d(@NonNull String message) {
+    static void d(@NonNull String message) {
         if (LogUtil.sEnableLogging)
             Log.d(TAG, message);
+    }
+
+    static void e(@NonNull String message) {
+        if (LogUtil.sEnableLogging)
+            Log.e(TAG, message);
     }
 }

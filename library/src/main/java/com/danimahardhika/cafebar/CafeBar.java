@@ -11,7 +11,7 @@ package com.danimahardhika.cafebar;
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed getTo in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -22,7 +22,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -69,7 +68,7 @@ public class CafeBar {
 
         mSnackBar = CafeBarUtil.getBaseSnackBar(cafeBarLayout, mBuilder);
         if (mSnackBar == null) {
-            LogUtil.d("Error, base snackbar == null");
+            LogUtil.e("Base snackbar == null");
             mBuilder = null;
             return;
         }
@@ -82,7 +81,8 @@ public class CafeBar {
         if (mBuilder.mPositiveText == null && mBuilder.mNegativeText == null) {
             LogUtil.d("CafeBar only contains neutral button");
             if (mBuilder.mNeutralText != null) {
-                setAction(mBuilder.mNeutralText, mBuilder.mNeutralColor, mBuilder.mNeutralCallback);
+                int neutralColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mNegativeColor);
+                setAction(mBuilder.mNeutralText, neutralColor, mBuilder.mNeutralCallback);
             }
         } else {
             LogUtil.d("CafeBar contains positive or negative button");
@@ -92,6 +92,7 @@ public class CafeBar {
             if (mBuilder.mNeutralText != null) {
                 TextView neutral = (TextView) buttonBase.findViewById(R.id.cafebar_button_neutral);
                 neutral.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View view) {
                         if (mBuilder.mNeutralCallback != null) {
@@ -135,20 +136,7 @@ public class CafeBar {
             }
         }
 
-        /*
-         * This code taken from https://stackoverflow.com/a/43811447
-         */
-        try {
-            Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
-            mAccessibilityManagerField.setAccessible(true);
-            AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);
-            Field mIsEnabledField = AccessibilityManager.class.getDeclaredField("mIsEnabled");
-            mIsEnabledField.setAccessible(true);
-            mIsEnabledField.setBoolean(accessibilityManager, false);
-            mAccessibilityManagerField.set(mSnackBar, accessibilityManager);
-        } catch (Exception e) {
-            LogUtil.d(Log.getStackTraceString(e));
-        }
+        setAccessibilityManagerDisabled();
     }
 
     public static void enableLogging(boolean enableLogging) {
@@ -208,7 +196,8 @@ public class CafeBar {
     }
 
     public void setAction(@NonNull String action, @Nullable CafeBarCallback callback) {
-        setButtonAction(action, mBuilder.mTheme.getTitleColor(), callback);
+        int actionColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mTheme.getTitleColor());
+        setButtonAction(action, actionColor, callback);
     }
 
     public void setAction(@NonNull String action, int color, @Nullable CafeBarCallback callback) {
@@ -217,7 +206,8 @@ public class CafeBar {
 
     public void setAction(@StringRes int res, @Nullable CafeBarCallback callback) {
         String string = mBuilder.mContext.getResources().getString(res);
-        setButtonAction(string, mBuilder.mTheme.getTitleColor(), callback);
+        int actionColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mTheme.getTitleColor());
+        setButtonAction(string, actionColor, callback);
     }
 
     public void setAction(@StringRes int res, int color, @Nullable CafeBarCallback callback) {
@@ -264,7 +254,6 @@ public class CafeBar {
         }
 
         int navBar = 0;
-        LogUtil.d("fitSystemWindow: " +mBuilder.mFitSystemWindow);
         if (mBuilder.mFitSystemWindow && !mBuilder.mFloating) {
             navBar = CafeBarUtil.getNavigationBarHeight(mBuilder.mContext);
         }
@@ -298,17 +287,12 @@ public class CafeBar {
 
         TextView button = CafeBarUtil.getActionView(mBuilder, action, color);
         if (mBuilder.mNeutralTypeface != null) {
-            LogUtil.d("action has custom typeface");
             button.setTypeface(mBuilder.mNeutralTypeface);
         }
 
         if (!longAction) {
-            LogUtil.d("checking if content root padding need to be re-adjusted");
-            Point point = CafeBarUtil.getMeasuredContentSize(mBuilder);
-            int defaultHeight = CafeBarUtil.getDefaultContentHeight(mBuilder.mContext, mBuilder.mNeutralTypeface);
-            if (point.y > defaultHeight) {
-                LogUtil.d("re-adjusting content root padding");
-
+            boolean multiLines = CafeBarUtil.isContentMultiLines(mBuilder);
+            if (multiLines) {
                 if (mBuilder.mFitSystemWindow && !mBuilder.mFloating) {
                     if (tabletMode || configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                         root.setPadding(side, side, (side - buttonPadding), (side + navBar));
@@ -318,8 +302,6 @@ public class CafeBar {
                 } else {
                     root.setPadding(side, side, (side - buttonPadding), side);
                 }
-            } else {
-                LogUtil.d("no need to re-adjust content root padding");
             }
         }
 
@@ -370,12 +352,17 @@ public class CafeBar {
     public void show() {
         if (mSnackBar == null) return;
 
-        mSnackBar.show();
+        try {
+            mSnackBar.show();
+        } catch (Exception e) {
+            LogUtil.d(Log.getStackTraceString(e));
+        }
 
         if (mBuilder.mSwipeToDismiss) return;
 
         if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
             mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
                 @Override
                 public boolean onPreDraw() {
                     mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
@@ -383,6 +370,30 @@ public class CafeBar {
                     return true;
                 }
             });
+        }
+    }
+
+    private void setAccessibilityManagerDisabled() {
+        try {
+            AccessibilityManager am = (AccessibilityManager) mBuilder.mContext
+                    .getSystemService(Context.ACCESSIBILITY_SERVICE);
+            if (!am.isEnabled()) {
+                LogUtil.d("Accessibility is off");
+                return;
+            }
+
+            /*
+             * This code taken from https://stackoverflow.com/a/43811447
+             */
+            Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
+            mAccessibilityManagerField.setAccessible(true);
+            AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);
+            Field mIsEnabledField = AccessibilityManager.class.getDeclaredField("mIsEnabled");
+            mIsEnabledField.setAccessible(true);
+            mIsEnabledField.setBoolean(accessibilityManager, false);
+            mAccessibilityManagerField.set(mSnackBar, accessibilityManager);
+        } catch (Exception e) {
+            LogUtil.d(Log.getStackTraceString(e));
         }
     }
 
@@ -398,16 +409,14 @@ public class CafeBar {
 
         private View mView;
         private View mCustomView;
-
-        private CafeBarTheme mTheme = CafeBarTheme.DARK;
-        private CafeBarTheme.Custom mCustomTheme = null;
+        private CafeBarTheme.Custom mTheme = CafeBarTheme.Custom(CafeBarTheme.DARK.getColor());
         private CafeBarGravity mGravity = CafeBarGravity.CENTER;
 
         private int mDuration = CafeBarDuration.SHORT.getDuration();
         private int mMaxLines = 2;
-        private int mPositiveColor = CafeBarTheme.DARK.getTitleColor();
-        private int mNegativeColor = CafeBarTheme.DARK.getTitleColor();
-        private int mNeutralColor = CafeBarTheme.DARK.getTitleColor();
+        private int mPositiveColor = mTheme.getTitleColor();
+        private int mNegativeColor = mTheme.getTitleColor();
+        private int mNeutralColor = mTheme.getTitleColor();
 
         private boolean mLongContent = false;
         private boolean mAutoDismiss = true;
@@ -422,7 +431,7 @@ public class CafeBar {
         private Typeface mPositiveTypeface;
         private Typeface mNegativeTypeface;
         private Typeface mNeutralTypeface;
-        private Drawable mIcon;
+        private Drawable mIcon = null;
 
         private String mContent = "";
         private String mPositiveText = null;
@@ -445,20 +454,18 @@ public class CafeBar {
         }
 
         public Builder customView(@LayoutRes int res) {
-            mCustomView = View.inflate(mContext, res, null);
-            return this;
+            return customView(res, false);
         }
 
         public Builder customView(@Nullable View customView) {
-            mCustomView = customView;
-            return this;
+            return customView(customView, false);
         }
 
         public Builder customView(@LayoutRes int res, boolean adjustCustomView) {
-            mCustomView = View.inflate(mContext, res, null);
-            mAdjustCustomView = adjustCustomView;
-            return this;
+            View view = View.inflate(mContext, res, null);
+            return customView(view, adjustCustomView);
         }
+
         public Builder customView(@Nullable View customView, boolean adjustCustomView) {
             mCustomView = customView;
             mAdjustCustomView = adjustCustomView;
@@ -466,8 +473,7 @@ public class CafeBar {
         }
 
         public Builder content(@StringRes int res) {
-            mContent = mContext.getResources().getString(res);
-            return this;
+            return content(mContext.getResources().getString(res));
         }
 
         public Builder content(@NonNull String content) {
@@ -491,32 +497,34 @@ public class CafeBar {
         }
 
         public Builder theme(@NonNull CafeBarTheme theme) {
-            mTheme = theme;
+            return theme(CafeBarTheme.Custom(theme.getColor()));
+        }
+
+        public Builder theme(@NonNull CafeBarTheme.Custom customTheme) {
+            mTheme = customTheme;
             mPositiveColor = mTheme.getTitleColor();
             mNegativeColor = mNeutralColor = mTheme.getSubTitleColor();
             return this;
         }
 
-        public Builder theme(@NonNull CafeBarTheme.Custom customTheme) {
-            mCustomTheme = customTheme;
-            mPositiveColor = mCustomTheme.getTitleColor();
-            mNegativeColor = mNeutralColor = mCustomTheme.getSubTitleColor();
-            return this;
-        }
-
-        public Builder icon(@Nullable Drawable icon) {
-            mIcon = icon;
-            return this;
-        }
-
         public Builder icon(@Nullable Bitmap icon) {
-            mIcon = CafeBarUtil.toDrawable(mContext, icon);
-            return this;
+            return icon(CafeBarUtil.toDrawable(mContext, icon), true);
         }
 
         public Builder icon(@DrawableRes int res) {
-            mIcon = CafeBarUtil.getDrawable(mContext, res);
-            return this;
+            return icon(CafeBarUtil.getDrawable(mContext, res), true);
+        }
+
+        public Builder icon(@Nullable Drawable icon) {
+            return icon(icon, true);
+        }
+
+        public Builder icon(@Nullable Bitmap icon, boolean tintIcon) {
+            return icon(CafeBarUtil.toDrawable(mContext, icon), tintIcon);
+        }
+
+        public Builder icon(@DrawableRes int res, boolean tintIcon) {
+            return icon(CafeBarUtil.getDrawable(mContext, res), tintIcon);
         }
 
         public Builder icon(@Nullable Drawable icon, boolean tintIcon) {
@@ -525,21 +533,8 @@ public class CafeBar {
             return this;
         }
 
-        public Builder icon(@Nullable Bitmap icon, boolean tintIcon) {
-            mIcon = CafeBarUtil.toDrawable(mContext, icon);
-            mTintIcon = tintIcon;
-            return this;
-        }
-
-        public Builder icon(@DrawableRes int res, boolean tintIcon) {
-            mIcon = CafeBarUtil.getDrawable(mContext, res);
-            mTintIcon = tintIcon;
-            return this;
-        }
-
         public Builder showShadow(@BoolRes int res) {
-            mShowShadow = mContext.getResources().getBoolean(res);
-            return this;
+            return showShadow(mContext.getResources().getBoolean(res));
         }
 
         public Builder showShadow(boolean showShadow) {
@@ -548,8 +543,7 @@ public class CafeBar {
         }
 
         public Builder autoDismiss(@BoolRes int res) {
-            mAutoDismiss = mContext.getResources().getBoolean(res);
-            return this;
+            return autoDismiss(mContext.getResources().getBoolean(res));
         }
 
         public Builder autoDismiss(boolean autoDismiss) {
@@ -558,8 +552,7 @@ public class CafeBar {
         }
 
         public Builder swipeToDismiss(@BoolRes int res) {
-            mSwipeToDismiss = mContext.getResources().getBoolean(res);
-            return this;
+            return swipeToDismiss(mContext.getResources().getBoolean(res));
         }
 
         public Builder swipeToDismiss(boolean swipeToDismiss) {
@@ -568,8 +561,7 @@ public class CafeBar {
         }
 
         public Builder floating(@BoolRes int res) {
-            mFloating = mContext.getResources().getBoolean(res);
-            return this;
+            return floating(mContext.getResources().getBoolean(res));
         }
 
         public Builder floating(boolean floating) {
@@ -582,25 +574,14 @@ public class CafeBar {
             return this;
         }
 
-        /**
-         * @deprecated use {{@link #fitSystemWindow()}} instead
-         */
-        @Deprecated
-        public Builder fitSystemWindow(@BoolRes int res) {
-            return fitSystemWindow();
-        }
-
-        /**
-         * @deprecated use {{@link #fitSystemWindow()}} instead
-         */
-        @Deprecated
-        public Builder fitSystemWindow(boolean fitSystemWindow) {
-            return fitSystemWindow();
-        }
-
         public Builder fitSystemWindow() {
             Activity activity = (Activity) mContext;
             Window window = activity.getWindow();
+            if (window == null) {
+                LogUtil.d("fitSystemWindow() window is null");
+                return this;
+            }
+
             WindowManager.LayoutParams params = window.getAttributes();
             int navigationBarHeight = CafeBarUtil.getNavigationBarHeight(mContext);
 
@@ -616,16 +597,19 @@ public class CafeBar {
             return this;
         }
 
+        public Builder typeface(String contentFontName, String buttonFontName) {
+            return typeface(CafeBarUtil.getTypeface(mContext, contentFontName),
+                    CafeBarUtil.getTypeface(mContext, buttonFontName));
+        }
+
         public Builder typeface(@Nullable Typeface content, @Nullable Typeface button) {
             mContentTypeface = content;
             mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = button;
             return this;
         }
 
-        public Builder typeface(String contentFontName, String buttonFontName) {
-            mContentTypeface = CafeBarUtil.getTypeface(mContext, contentFontName);
-            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = CafeBarUtil.getTypeface(mContext, buttonFontName);
-            return this;
+        public Builder contentTypeface(String fontName) {
+            return contentTypeface(CafeBarUtil.getTypeface(mContext, fontName));
         }
 
         public Builder contentTypeface(@Nullable Typeface typeface) {
@@ -633,9 +617,8 @@ public class CafeBar {
             return this;
         }
 
-        public Builder contentTypeface(String fontName) {
-            mContentTypeface = CafeBarUtil.getTypeface(mContext, fontName);
-            return this;
+        public Builder positiveTypeface(String fontName) {
+            return positiveTypeface(CafeBarUtil.getTypeface(mContext, fontName));
         }
 
         public Builder positiveTypeface(@Nullable Typeface typeface) {
@@ -643,9 +626,8 @@ public class CafeBar {
             return this;
         }
 
-        public Builder positiveTypeface(String fontName) {
-            mPositiveTypeface = CafeBarUtil.getTypeface(mContext, fontName);
-            return this;
+        public Builder negativeTypeface(String fontName) {
+            return negativeTypeface(CafeBarUtil.getTypeface(mContext, fontName));
         }
 
         public Builder negativeTypeface(@Nullable Typeface typeface) {
@@ -653,9 +635,8 @@ public class CafeBar {
             return this;
         }
 
-        public Builder negativeTypeface(String fontName) {
-            mNegativeTypeface = CafeBarUtil.getTypeface(mContext, fontName);
-            return this;
+        public Builder neutralTypeface(String fontName) {
+            return neutralTypeface(CafeBarUtil.getTypeface(mContext, fontName));
         }
 
         public Builder neutralTypeface(@Nullable Typeface typeface) {
@@ -663,18 +644,12 @@ public class CafeBar {
             return this;
         }
 
-        public Builder neutralTypeface(String fontName) {
-            mNeutralTypeface = CafeBarUtil.getTypeface(mContext, fontName);
-            return this;
+        public Builder buttonTypeface(String fontName) {
+            return buttonTypeface(CafeBarUtil.getTypeface(mContext, fontName));
         }
 
         public Builder buttonTypeface(@Nullable Typeface typeface) {
             mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = typeface;
-            return this;
-        }
-
-        public Builder buttonTypeface(String fontName) {
-            mNeutralTypeface = mPositiveTypeface = mNegativeTypeface = CafeBarUtil.getTypeface(mContext, fontName);
             return this;
         }
 
@@ -700,8 +675,7 @@ public class CafeBar {
         }
 
         public Builder positiveText(@StringRes int res) {
-            mPositiveText = mContext.getResources().getString(res);
-            return this;
+            return positiveText(mContext.getResources().getString(res));
         }
 
         public Builder positiveText(@NonNull String positiveText) {
@@ -710,8 +684,7 @@ public class CafeBar {
         }
 
         public Builder negativeText(@StringRes int res) {
-            mNegativeText = mContext.getResources().getString(res);
-            return this;
+            return negativeText(mContext.getResources().getString(res));
         }
 
         public Builder negativeText(@NonNull String negativeText) {
@@ -720,8 +693,7 @@ public class CafeBar {
         }
 
         public Builder neutralText(@StringRes int res) {
-            mNeutralText = mContext.getResources().getString(res);
-            return this;
+            return neutralText(mContext.getResources().getString(res));
         }
 
         public Builder neutralText(@NonNull String neutralText) {
@@ -744,12 +716,12 @@ public class CafeBar {
             return this;
         }
 
-        public void show() {
-            build().show();
-        }
-
         public CafeBar build() {
             return new CafeBar(this);
+        }
+
+        public void show() {
+            build().show();
         }
 
         void longContent(boolean longContent) {
@@ -761,48 +733,37 @@ public class CafeBar {
         }
 
         @NonNull
-        Context context() {
+        Context getContext() {
             return mContext;
         }
 
         @Nullable
-        View to() {
+        View getTo() {
             return mView;
         }
 
         @Nullable
-        View customView() {
+        View getCustomView() {
             return mCustomView;
         }
 
-        boolean adjustCustomView() {
+        boolean isAdjustCustomView() {
             return mAdjustCustomView;
         }
 
-        @Nullable
-        Typeface contentTypeface() {
-            return mContentTypeface;
-        }
-
-        @NonNull
-        CafeBarTheme theme() {
+        CafeBarTheme.Custom getTheme() {
             return mTheme;
         }
 
-        @Nullable
-        CafeBarTheme.Custom customTheme() {
-            return mCustomTheme;
-        }
-
-        int duration() {
+        int getDuration() {
             return mDuration;
         }
 
-        boolean autoDismiss() {
+        boolean isAutoDismiss() {
             return mAutoDismiss;
         }
 
-        boolean showShadow() {
+        boolean isShowShadow() {
             return mShowShadow;
         }
 
@@ -810,77 +771,82 @@ public class CafeBar {
             return mFitSystemWindow;
         }
 
-        boolean floating() {
+        boolean isFloating() {
             return mFloating;
         }
 
         @NonNull
-        CafeBarGravity gravity() {
+        CafeBarGravity getGravity() {
             return mGravity;
         }
 
         @Nullable
-        Drawable icon() {
+        Drawable getIcon() {
             return mIcon;
         }
 
-        boolean tintIcon() {
+        boolean isTintIcon() {
             return mTintIcon;
         }
 
         @NonNull
-        String content() {
+        String getContent() {
             return mContent;
         }
 
         @Nullable
-        SpannableStringBuilder spannableBuilder() {
+        Typeface getContentTypeface() {
+            return mContentTypeface;
+        }
+
+        @Nullable
+        SpannableStringBuilder getSpannableStringBuilder() {
             return mSpannableBuilder;
         }
 
-        int maxLines() {
+        int getMaxLines() {
             return mMaxLines;
         }
 
-        int positiveColor() {
+        int getPositiveColor() {
             return mPositiveColor;
         }
 
-        int negativeColor() {
+        int getNegativeColor() {
             return mNegativeColor;
         }
 
-        int neutralColor() {
+        int getNeutralColor() {
             return mNeutralColor;
         }
 
         @Nullable
-        Typeface positiveTypeface() {
+        Typeface getPositiveTypeface() {
             return mPositiveTypeface;
         }
 
         @Nullable
-        Typeface negativeTypeface() {
+        Typeface getNegativeTypeface() {
             return mNegativeTypeface;
         }
 
         @Nullable
-        Typeface neutralTypeface() {
+        Typeface getNeutralTypeface() {
             return mNeutralTypeface;
         }
 
         @Nullable
-        String positiveText() {
+        String getPositiveText() {
             return mPositiveText;
         }
 
         @Nullable
-        String negativeText() {
+        String getNegativeText() {
             return mNegativeText;
         }
 
         @Nullable
-        String neutralText() {
+        String getNeutralText() {
             return mNeutralText;
         }
     }

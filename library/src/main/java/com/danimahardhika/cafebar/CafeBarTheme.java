@@ -11,7 +11,7 @@ package com.danimahardhika.cafebar;
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed getTo in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -20,10 +20,10 @@ package com.danimahardhika.cafebar;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 
 @SuppressWarnings("unused")
 public enum CafeBarTheme {
+
     LIGHT(Color.parseColor("#F5F5F5")),
     DARK(Color.parseColor("#323232")),
     CLEAR_BLACK(Color.BLACK);
@@ -39,21 +39,15 @@ public enum CafeBarTheme {
         return mColor;
     }
 
-    @ColorInt
-    int getTitleColor() {
-        return CafeBarUtil.getTitleTextColor(mColor);
-    }
-
-    @ColorInt
-    int getSubTitleColor() {
-        return CafeBarUtil.getSubTitleTextColor(mColor);
+    public static Custom Custom(@ColorInt int color) {
+        return new Custom(color);
     }
 
     public static class Custom {
 
         private int mColor;
 
-        public Custom(@ColorInt int color) {
+        private Custom(int color) {
             mColor = color;
         }
 

@@ -19,7 +19,7 @@ allprojects {
 Add the dependency
 ```Gradle
 dependencies {
-    compile 'com.github.danimahardhika:cafebar:1.1.5'
+    compile 'com.github.danimahardhika:cafebar:1.1.6'
 }
 ```
 
@@ -99,7 +99,7 @@ Builder
 - `contentTypeface()` &#8594; Custom typeface for content
 - `maxLines()` &#8594; Max content lines, must be between 1 to 6.
 - `duration()` &#8594; Show duration
-- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`. With release 1.0.7 you can use custom theme `new CafeBarTheme.Custom()`.
+- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`. With release 1.0.7 you can use custom theme `new CafeBarTheme.Custom(int)`. In release 1.1.6 `Custom()` has private access, use `CafeBarTheme.Custom(int)` instead.
 - `icon()` &#8594; Icon shown on left side of content
 - `showShadow()` &#8594; Enable or disable shadow
 - `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true

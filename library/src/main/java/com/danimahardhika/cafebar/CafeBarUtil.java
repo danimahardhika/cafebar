@@ -523,10 +523,6 @@ class CafeBarUtil {
             padding += icon;
         }
 
-        if (builder.isFloating() || tabletMode) {
-            padding += builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_padding);
-        }
-
         TextView textView = new TextView(builder.getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, builder.getContext().getResources()
                 .getDimension(R.dimen.cafebar_content_text));
@@ -541,7 +537,12 @@ class CafeBarUtil {
             textView.setText(builder.getContent());
         }
 
-        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.AT_MOST);
+        int maxWidth = metrics.widthPixels;
+        if (builder.isFloating() || tabletMode) {
+            maxWidth = builder.getContext().getResources().getDimensionPixelSize(R.dimen.cafebar_floating_max_width);
+        }
+
+        int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(maxWidth, View.MeasureSpec.AT_MOST);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
 

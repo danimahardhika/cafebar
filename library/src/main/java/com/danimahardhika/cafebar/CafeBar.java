@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.BoolRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntRange;
@@ -352,11 +353,7 @@ public class CafeBar {
     public void show() {
         if (mSnackBar == null) return;
 
-        try {
-            mSnackBar.show();
-        } catch (Exception e) {
-            LogUtil.d(Log.getStackTraceString(e));
-        }
+        mSnackBar.show();
 
         if (mBuilder.mSwipeToDismiss) return;
 
@@ -373,12 +370,21 @@ public class CafeBar {
         }
     }
 
+    private boolean isAccessibilityManagerEnabled() {
+        int accessibilityEnabled = 0;
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(mBuilder.mContext.getContentResolver(),
+                    android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+            LogUtil.d("Accessibility manager enabled ? " +accessibilityEnabled);
+        } catch (Exception e) {
+            LogUtil.d("Accessibility manager is disabled");
+        }
+        return accessibilityEnabled > 0;
+    }
+
     private void setAccessibilityManagerDisabled() {
         try {
-            AccessibilityManager am = (AccessibilityManager) mBuilder.mContext
-                    .getSystemService(Context.ACCESSIBILITY_SERVICE);
-            if (!am.isEnabled()) {
-                LogUtil.d("Accessibility is off");
+            if (!isAccessibilityManagerEnabled()) {
                 return;
             }
 

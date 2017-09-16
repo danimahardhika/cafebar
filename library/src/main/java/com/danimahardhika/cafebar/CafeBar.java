@@ -371,6 +371,14 @@ public class CafeBar {
     }
 
     private boolean isAccessibilityManagerEnabled() {
+        String manufacturer = android.os.Build.MANUFACTURER;
+        LogUtil.d("Manufacturer: " +manufacturer);
+        if (manufacturer.equalsIgnoreCase("xiaomi")) {
+            //Seriously accessibility manager on xiaomi device is a mess
+            //Better to returns false
+            return false;
+        }
+
         int accessibilityEnabled = 0;
         try {
             accessibilityEnabled = Settings.Secure.getInt(mBuilder.mContext.getContentResolver(),
@@ -379,7 +387,7 @@ public class CafeBar {
         } catch (Exception e) {
             LogUtil.d("Accessibility manager is disabled");
         }
-        return accessibilityEnabled > 0;
+        return accessibilityEnabled == 1;
     }
 
     private void setAccessibilityManagerDisabled() {
@@ -395,6 +403,7 @@ public class CafeBar {
             mAccessibilityManagerField.setAccessible(true);
             AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);
             Field mIsEnabledField = AccessibilityManager.class.getDeclaredField("mIsEnabled");
+
             mIsEnabledField.setAccessible(true);
             mIsEnabledField.setBoolean(accessibilityManager, false);
             mAccessibilityManagerField.set(mSnackBar, accessibilityManager);

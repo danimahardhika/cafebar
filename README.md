@@ -19,7 +19,7 @@ allprojects {
 Add the dependency
 ```Gradle
 dependencies {
-    compile 'com.github.danimahardhika:cafebar:1.1.6'
+    compile 'com.github.danimahardhika:cafebar:1.2.0'
 }
 ```
 
@@ -74,8 +74,9 @@ CafeBar.builder(context)
 ```java
 CafeBar.builder(context)
     //With release 1.0.7 you can use custom theme
+    //In release 1.1.7 and up CafeBarTheme.Custom has private access
     //Text color (content and buttons) automatically set
-    .theme(new CafeBarTheme.Custom(Color.parseColor("#F44336")));
+    .theme(CafeBarTheme.Custom(Color.parseColor("#F44336")));
     .content(R.string.text)
     .show();
 ```

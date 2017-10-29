@@ -29,6 +29,7 @@ import android.provider.Settings;
 import android.support.annotation.BoolRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -49,6 +50,8 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -67,19 +70,16 @@ public class CafeBar {
     private CafeBar(@NonNull Builder builder) {
         mBuilder = builder;
 
-        View cafeBarLayout = mBuilder.mCustomView;
-        if (cafeBarLayout == null) {
-            LogUtil.d("CafeBar doesn't have customView, preparing it...");
-            cafeBarLayout = CafeBarUtil.getBaseCafeBarView(mBuilder);
-        } else {
-            CafeBarUtil.adjustCustomView(mBuilder, cafeBarLayout);
+        View baseLayout = mBuilder.mCustomView;
+        if (baseLayout == null) {
+            LogUtil.d("CafeBar doesn't have customView, preparing it ...");
+            baseLayout = CafeBarUtil.getBaseCafeBarView(mBuilder);
         }
 
-        mSnackBar = CafeBarUtil.getBaseSnackBar(cafeBarLayout, mBuilder);
+        mSnackBar = CafeBarUtil.getBaseSnackBar(baseLayout, mBuilder);
         if (mSnackBar == null) {
-            LogUtil.e("Base snackbar == null");
             mBuilder = null;
-            return;
+            throw new IllegalStateException("CafeBar base is null");
         }
 
         if (mBuilder.mCustomView != null) {
@@ -88,14 +88,14 @@ public class CafeBar {
         }
 
         if (mBuilder.mPositiveText == null && mBuilder.mNegativeText == null) {
-            LogUtil.d("CafeBar only contains neutral button");
+            //Only contains neutral button
             if (mBuilder.mNeutralText != null) {
                 int neutralColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mNegativeColor);
                 setAction(mBuilder.mNeutralText, neutralColor, mBuilder.mNeutralCallback);
             }
         } else {
-            LogUtil.d("CafeBar contains positive or negative button");
-            LinearLayout root = (LinearLayout) getCafeBarView();
+            //Contains positive or negative button
+            LinearLayout root = (LinearLayout) getView();
             LinearLayout buttonBase = (LinearLayout) root.findViewById(R.id.cafebar_button_base);
 
             if (mBuilder.mNeutralText != null) {
@@ -144,8 +144,6 @@ public class CafeBar {
                 });
             }
         }
-
-        setAccessibilityManagerDisabled();
     }
 
     public static void enableLogging(boolean enableLogging) {
@@ -153,75 +151,69 @@ public class CafeBar {
     }
 
     @NonNull
-    public static CafeBar make(@NonNull Context context, @NonNull String content, @NonNull CafeBarDuration duration) {
-        return prepareCafeBar(context, content, duration);
-    }
-
-    @NonNull
-    public static CafeBar make(@NonNull Context context, @StringRes int res, @NonNull CafeBarDuration duration) {
+    public static CafeBar make(@NonNull Context context, @StringRes int res, @Duration int duration) {
         String string = context.getResources().getString(res);
-        return prepareCafeBar(context, string, duration);
+        return create(context, null, string, duration);
     }
 
     @NonNull
-    public static CafeBar make(@NonNull View to, @NonNull String content, @NonNull CafeBarDuration duration) {
-        return prepareCafeBar(to, content, duration);
+    public static CafeBar make(@NonNull Context context, @NonNull String content, @Duration int duration) {
+        return create(context, null, content, duration);
     }
 
     @NonNull
-    public static CafeBar make(@NonNull View to, @StringRes int res, @NonNull CafeBarDuration duration) {
-        String string = to.getContext().getResources().getString(res);
-        return prepareCafeBar(to, string, duration);
-    }
-
-    @NonNull
-    private static CafeBar prepareCafeBar(@NonNull Context context, @NonNull String content,
-                                   @NonNull CafeBarDuration duration) {
-        CafeBar.Builder builder = new Builder(context);
-        builder.content(content);
-        builder.duration(duration.getDuration());
-        if (duration == CafeBarDuration.INDEFINITE) {
-            builder.autoDismiss(false);
-        }
-        return new CafeBar(builder);
-    }
-
-    @NonNull
-    private static CafeBar prepareCafeBar(@NonNull View to, @NonNull String content,
-                                          @NonNull CafeBarDuration duration) {
+    public static CafeBar make(@NonNull View to, @StringRes int res, @Duration int duration) {
         Context context = to.getContext();
         if (context instanceof ContextThemeWrapper) {
             context = ((ContextThemeWrapper) context).getBaseContext();
         }
+        String string = context.getResources().getString(res);
+        return create(context, to, string, duration);
+    }
 
+    @NonNull
+    public static CafeBar make(@NonNull View to, @NonNull String content, @Duration int duration) {
+        Context context = to.getContext();
+        if (context instanceof ContextThemeWrapper) {
+            context = ((ContextThemeWrapper) context).getBaseContext();
+        }
+        return create(context, to, content, duration);
+    }
+
+    @NonNull
+    private static CafeBar create(@NonNull Context context, @Nullable View to, @NonNull String content, @Duration int duration) {
         CafeBar.Builder builder = new Builder(context);
         builder.to(to);
         builder.content(content);
-        builder.duration(duration.getDuration());
-        if (duration == CafeBarDuration.INDEFINITE) {
+        builder.duration(duration);
+        if (duration == Duration.INDEFINITE) {
             builder.autoDismiss(false);
         }
         return new CafeBar(builder);
     }
 
-    public void setAction(@NonNull String action, @Nullable CafeBarCallback callback) {
-        int actionColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mTheme.getTitleColor());
-        setButtonAction(action, actionColor, callback);
-    }
-
-    public void setAction(@NonNull String action, int color, @Nullable CafeBarCallback callback) {
-        setButtonAction(action, color, callback);
-    }
-
-    public void setAction(@StringRes int res, @Nullable CafeBarCallback callback) {
+    public CafeBar setAction(@StringRes int res, @Nullable CafeBarCallback callback) {
         String string = mBuilder.mContext.getResources().getString(res);
         int actionColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mTheme.getTitleColor());
         setButtonAction(string, actionColor, callback);
+        return this;
     }
 
-    public void setAction(@StringRes int res, int color, @Nullable CafeBarCallback callback) {
+    public CafeBar setAction(@NonNull String action, @Nullable CafeBarCallback callback) {
+        int actionColor = CafeBarUtil.getAccentColor(mBuilder.mContext, mBuilder.mTheme.getTitleColor());
+        setButtonAction(action, actionColor, callback);
+        return this;
+    }
+
+    public CafeBar setAction(@StringRes int res, int color, @Nullable CafeBarCallback callback) {
         String string = mBuilder.mContext.getResources().getString(res);
         setButtonAction(string, color, callback);
+        return this;
+    }
+
+    public CafeBar setAction(@NonNull String action, int color, @Nullable CafeBarCallback callback) {
+        setButtonAction(action, color, callback);
+        return this;
     }
 
     private void setButtonAction(@NonNull String action, int color, @Nullable final CafeBarCallback callback) {
@@ -234,16 +226,15 @@ public class CafeBar {
         mBuilder.mNeutralText = action;
         mBuilder.mNeutralColor = color;
 
-        LinearLayout root = (LinearLayout) getCafeBarView();
+        LinearLayout root = (LinearLayout) getView();
         boolean longAction = CafeBarUtil.isLongAction(action);
-        LinearLayout contentBase = (LinearLayout) root.findViewById(R.id.cafebar_content_base);
 
-        if (contentBase.getChildCount() > 1) {
-            LogUtil.d("content container childView count > 1, setAction already set from builder via neutralText");
+        if (root.getChildCount() > 1) {
+            LogUtil.d("setAction already set from builder via neutralText");
             return;
         }
 
-        TextView content = (TextView) contentBase.findViewById(R.id.cafebar_content);
+        TextView content = (TextView) root.findViewById(R.id.cafebar_content);
 
         int side = mBuilder.mContext.getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
         int top = mBuilder.mContext.getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);
@@ -253,7 +244,7 @@ public class CafeBar {
 
         if (longAction) {
             bottom = buttonPadding;
-            contentBase.setOrientation(LinearLayout.VERTICAL);
+            root.setOrientation(LinearLayout.VERTICAL);
             content.setPadding(0, 0, buttonPadding, 0);
         } else {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) content.getLayoutParams();
@@ -327,8 +318,10 @@ public class CafeBar {
             }
         });
 
-        contentBase.addView(button);
+        root.addView(button);
     }
+
+
 
     @NonNull
     private CafeBar getCafeBar() {
@@ -336,11 +329,10 @@ public class CafeBar {
     }
 
     @NonNull
-    public View getCafeBarView() {
+    public View getView() {
         Snackbar.SnackbarLayout snackBarLayout = (Snackbar.SnackbarLayout) mSnackBar.getView();
 
         boolean tabletMode = mBuilder.mContext.getResources().getBoolean(R.bool.cafebar_tablet_mode);
-        LogUtil.d("Tablet mode: " +tabletMode);
 
         if (tabletMode || mBuilder.mFloating) {
             CardView cardView = (CardView) snackBarLayout.getChildAt(0);
@@ -359,8 +351,7 @@ public class CafeBar {
     }
 
     public void show() {
-        if (mSnackBar == null) return;
-
+        setAccessibilityManagerDisabled();
         mSnackBar.show();
 
         if (mBuilder.mSwipeToDismiss) return;
@@ -378,9 +369,12 @@ public class CafeBar {
         }
     }
 
+
+
     private boolean isAccessibilityManagerEnabled() {
         String manufacturer = android.os.Build.MANUFACTURER;
-        if (manufacturer.equalsIgnoreCase("xiaomi")) {
+        if (manufacturer.equalsIgnoreCase("xiaomi") ||
+                manufacturer.equalsIgnoreCase("google")) {
             //Seriously accessibility manager on xiaomi device is a mess
             //Better to returns false
             return false;
@@ -429,12 +423,12 @@ public class CafeBar {
 
         Context mContext;
 
-        @Nullable View mTo;
+        @NonNull View mTo;
         @Nullable View mCustomView;
         CafeBarTheme.Custom mTheme = CafeBarTheme.Custom(CafeBarTheme.DARK.getColor());
         CafeBarGravity mGravity = CafeBarGravity.CENTER;
 
-        int mDuration = CafeBarDuration.SHORT.getDuration();
+        int mDuration = Duration.SHORT;
         int mMaxLines = 2;
         @ColorInt int mPositiveColor = mTheme.getTitleColor();
         @ColorInt int mNegativeColor = mTheme.getTitleColor();
@@ -445,7 +439,6 @@ public class CafeBar {
         boolean mShowShadow = true;
         boolean mFitSystemWindow = false;
         boolean mFloating = false;
-        boolean mAdjustCustomView = false;
         boolean mTintIcon = true;
         boolean mSwipeToDismiss = true;
 
@@ -467,29 +460,28 @@ public class CafeBar {
         public Builder(@NonNull Context context) {
             mContext = context;
             mTypefaces = new HashMap<>();
+
+            mTo = ((Activity) mContext).getWindow().getDecorView()
+                    .findViewById(android.R.id.content);
         }
 
         public Builder to(@Nullable View view) {
-            mTo = view;
+            if (view != null) {
+                mTo = view;
+                return this;
+            }
+
+            LogUtil.e("to(View): view is null, ignored");
             return this;
         }
 
         public Builder customView(@LayoutRes int res) {
-            return customView(res, false);
+            View view = View.inflate(mContext, res, null);
+            return customView(view);
         }
 
         public Builder customView(@Nullable View customView) {
-            return customView(customView, false);
-        }
-
-        public Builder customView(@LayoutRes int res, boolean adjustCustomView) {
-            View view = View.inflate(mContext, res, null);
-            return customView(view, adjustCustomView);
-        }
-
-        public Builder customView(@Nullable View customView, boolean adjustCustomView) {
             mCustomView = customView;
-            mAdjustCustomView = adjustCustomView;
             return this;
         }
 
@@ -512,7 +504,7 @@ public class CafeBar {
             return this;
         }
 
-        public Builder duration(@IntRange (from = 1, to = 10000) int duration) {
+        public Builder duration(@IntRange (from = 1000, to = 10000) int duration) {
             mDuration = duration;
             return this;
         }
@@ -762,5 +754,14 @@ public class CafeBar {
             }
             return null;
         }
+    }
+
+    @IntDef({Duration.SHORT, Duration.MEDIUM, Duration.LONG, Duration.INDEFINITE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Duration {
+        int SHORT = 2000;
+        int MEDIUM = 3500;
+        int LONG = 5000;
+        int INDEFINITE = -1;
     }
 }

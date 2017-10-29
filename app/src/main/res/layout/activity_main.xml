@@ -114,16 +114,10 @@
             android:text="With Custom View" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/with_custom_view_adjusted"
+            android:id="@+id/floating_with_custom_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="With Custom View Adjusted" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/floating_with_custom_view_adjusted"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Floating With Custom View Adjusted" />
+            android:text="Floating With Custom View" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/spannable_typeface"

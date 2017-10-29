@@ -108,7 +108,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
+                View v = cafeBar.getView();
 
                 AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
                 button.setOnClickListener(new View.OnClickListener() {
@@ -121,66 +121,19 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
             }
         });
 
-        //With Custom View Adjusted
-        findViewById(R.id.with_custom_view_adjusted).setOnClickListener(new View.OnClickListener() {
+        //Floating With Custom View Move Fab
+        findViewById(R.id.floating_with_custom_view_move_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
-                        .customView(R.layout.cafebar_custom_layout, true)
-                        .fitSystemWindow()
-                        .autoDismiss(false);
-
-                final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
-
-                AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        cafeBar.dismiss();
-                    }
-                });
-                cafeBar.show();
-            }
-        });
-
-        //With Custom View Adjusted Move Fab
-        findViewById(R.id.with_custom_view_adjusted_move_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
-                        .customView(R.layout.cafebar_custom_layout, true)
-                        .to(findViewById(R.id.coordinator))
-                        .fitSystemWindow()
-                        .autoDismiss(false);
-
-                final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
-
-                AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        cafeBar.dismiss();
-                    }
-                });
-                cafeBar.show();
-            }
-        });
-
-        //Floating With Custom View Adjusted Move Fab
-        findViewById(R.id.floating_with_custom_view_adjusted_move_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CafeBar.Builder builder = new CafeBar.Builder(TranslucentNavBarActivity.this)
-                        .customView(R.layout.cafebar_custom_layout, true)
+                        .customView(R.layout.cafebar_custom_layout)
                         .to(findViewById(R.id.coordinator))
                         .fitSystemWindow()
                         .floating(true)
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
+                View v = cafeBar.getView();
 
                 AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
                 button.setOnClickListener(new View.OnClickListener() {

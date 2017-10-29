@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.danimahardhika.cafebar.CafeBar;
 import com.danimahardhika.cafebar.CafeBarCallback;
-import com.danimahardhika.cafebar.CafeBarDuration;
 import com.danimahardhika.cafebar.CafeBarGravity;
 import com.danimahardhika.cafebar.CafeBarTheme;
 
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.simple_single_line).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CafeBar.make(MainActivity.this, "Single Line...", CafeBarDuration.SHORT).show();
+                CafeBar.make(MainActivity.this, "Single Line...", CafeBar.Duration.SHORT).show();
             }
         });
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.simple_multi_lines).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CafeBar.make(MainActivity.this, R.string.demo_text, CafeBarDuration.SHORT).show();
+                CafeBar.make(MainActivity.this, R.string.demo_text, CafeBar.Duration.SHORT).show();
             }
         });
 
@@ -75,18 +74,16 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.simple_action).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CafeBar cafeBar = CafeBar.make(MainActivity.this, "CafeBar with Action", CafeBarDuration.INDEFINITE);
-                cafeBar.setAction("Action", Color.parseColor("#03A9F4"), new CafeBarCallback() {
-                    @Override
-                    public void OnClick(@NonNull CafeBar cafeBar) {
-                        Toast.makeText(MainActivity.this, "CafeBar dismissed", Toast.LENGTH_LONG).show();
-
-                        //Dismiss CafeBar when action pressed
-                        cafeBar.dismiss();
-                    }
-                });
-                //Don't forget to show
-                cafeBar.show();
+                CafeBar.make(MainActivity.this, "CafeBar with Action", CafeBar.Duration.INDEFINITE)
+                        .setAction("Action", Color.parseColor("#03A9F4"), new CafeBarCallback() {
+                            @Override
+                            public void OnClick(@NonNull CafeBar cafeBar) {
+                                Toast.makeText(MainActivity.this, "CafeBar dismissed", Toast.LENGTH_LONG).show();
+                                //Dismiss CafeBar when action pressed
+                                cafeBar.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -174,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
                 CafeBar cafeBar = builder.build();
                 //--- Old method
-                //View v = cafeBar.getCafeBarView();
+                //View v = cafeBar.getView();
                 //v.setBackgroundColor(Color.parseColor("#455A64"));
 
                 cafeBar.show();
@@ -222,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 CafeBar.builder(MainActivity.this)
-                        .content("Floating CafeBar")
+                        .content("Floating CafeBar tesdfsdf sdfsdfsd sdfsdfsd sdfsdf")
                         .floating(true)
-                        .duration(CafeBarDuration.SHORT.getDuration())
+                        .duration(CafeBar.Duration.MEDIUM)
                         .neutralText("Floating")
                         .neutralColor(Color.parseColor("#EEFF41"))
                         .show();
@@ -302,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
+                View v = cafeBar.getView();
 
                 AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
                 button.setOnClickListener(new View.OnClickListener() {
@@ -315,39 +312,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //With Custom View Adjusted
-        findViewById(R.id.with_custom_view_adjusted).setOnClickListener(new View.OnClickListener() {
+        //Floating With Custom View
+        findViewById(R.id.floating_with_custom_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CafeBar.Builder builder = new CafeBar.Builder(MainActivity.this)
-                        .customView(R.layout.cafebar_custom_layout, true)
-                        .autoDismiss(false);
-
-                final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
-
-                AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        cafeBar.dismiss();
-                    }
-                });
-                cafeBar.show();
-            }
-        });
-
-        //Floating With Custom View Adjusted
-        findViewById(R.id.floating_with_custom_view_adjusted).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CafeBar.Builder builder = new CafeBar.Builder(MainActivity.this)
-                        .customView(R.layout.cafebar_custom_layout, true)
+                        .customView(R.layout.cafebar_custom_layout)
                         .floating(true)
                         .autoDismiss(false);
 
                 final CafeBar cafeBar = builder.build();
-                View v = cafeBar.getCafeBarView();
+                View v = cafeBar.getView();
 
                 AppCompatButton button = (AppCompatButton) v.findViewById(R.id.button);
                 button.setOnClickListener(new View.OnClickListener() {

@@ -58,22 +58,10 @@
                 android:text="With Custom View" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/with_custom_view_adjusted"
+                android:id="@+id/floating_with_custom_view_move_fab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="With Custom View Adjusted" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/with_custom_view_adjusted_move_fab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="With Custom View Adjusted Move Fab" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/floating_with_custom_view_adjusted_move_fab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Floating With Custom View Adjusted Move Fab" />
+                android:text="Floating With Custom View Move Fab" />
 
         </LinearLayout>
 

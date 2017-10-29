@@ -24,15 +24,25 @@ dependencies {
 ```
 
 # Usage
+Old release [1.0.0](https://github.com/danimahardhika/cafebar/releases/tag/1.0.0) - [1.2.0](https://github.com/danimahardhika/cafebar/releases/tag/1.2.0) take a look [here](https://github.com/danimahardhika/cafebar/wiki/Old-Readme)
+
 #### Show simple CafeBar
 ```java
-CafeBar.make(context, R.string.text, CafeBarDuration.SHORT).show();
+CafeBar.make(context, R.string.text, CafeBar.Duration.SHORT).show();
+```
+
+#### Show simple CafeBar with action
+```java
+CafeBar.make(context, R.string.text, CafeBar.Duration.SHORT)
+    .setAction(actionText, actionColor, callback)
+    .show();
 ```
 
 #### Using builder
 ```java
 CafeBar.builder(context)
     .theme(CafeBarTheme.LIGHT)
+    .duration(CafeBar.Duration.MEDIUM)
     .content(R.string.text)
     .neutralText("Action")
     //You can parse string color
@@ -48,7 +58,7 @@ CafeBar.Builder builder = new CafeBar.Builder(context);
 ...
 CafeBar cafeBar = builder.build();
 
-View v = cafeBar.getCafeBarView();
+View v = cafeBar.getView();
 //Do something
 cafeBar.show();
 ```
@@ -73,8 +83,6 @@ CafeBar.builder(context)
 #### Custom Theme
 ```java
 CafeBar.builder(context)
-    //With release 1.0.7 you can use custom theme
-    //In release 1.1.7 and up CafeBarTheme.Custom has private access
     //Text color (content and buttons) automatically set
     .theme(CafeBarTheme.Custom(Color.parseColor("#F44336")));
     .content(R.string.text)
@@ -100,7 +108,7 @@ Builder
 - `contentTypeface()` &#8594; Custom typeface for content
 - `maxLines()` &#8594; Max content lines, must be between 1 to 6.
 - `duration()` &#8594; Show duration
-- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`. With release 1.0.7 you can use custom theme `new CafeBarTheme.Custom(int)`. In release 1.1.6 `Custom()` has private access, use `CafeBarTheme.Custom(int)` instead.
+- `theme()` &#8594; CafeBar theme, there are 3 choices available `DARK` (default), `LIGHT`, and `CLEAR_BLACK`. You can use custom theme `CafeBarTheme.Custom(int)`.
 - `icon()` &#8594; Icon shown on left side of content
 - `showShadow()` &#8594; Enable or disable shadow
 - `autoDismiss()` &#8594; Enable or disable auto dismiss, default is true
@@ -129,7 +137,7 @@ Builder
 CafeBar
 - `make()` &#8594; Create CafeBar
 - `setAction()` &#8594; It's the same with neutral action from builder, if `neutralText()` already set from builder `setAction()` will be ignored.
-- `getCafeBarView()` &#8594; Get root view of CafeBar
+- `getView()` &#8594; Get root view of CafeBar
 - `show()` &#8594; Show CafeBar
 - `dismiss()` &#8594; Dismiss CafeBar
 

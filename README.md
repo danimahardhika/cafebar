@@ -6,7 +6,7 @@ An upgraded Snackbar for Android that provides more options and easy to use. Dow
 <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/screenshot.jpg" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-0.gif" height="456"> <img src="https://raw.githubusercontent.com/danimahardhika/cafebar/master/arts/demo-1.gif" height="456">
 
 # Gradle Dependency
-The minimum API level supported by this library is API 13
+The minimum API level supported by this library is API 14
 
 Add JitPack repository to root ```build.gradle```
 ```Gradle
@@ -19,7 +19,7 @@ allprojects {
 Add the dependency
 ```Gradle
 dependencies {
-    compile 'com.github.danimahardhika:cafebar:1.2.0'
+    compile 'com.github.danimahardhika:cafebar:1.3.0'
 }
 ```
 

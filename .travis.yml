@@ -5,11 +5,11 @@ android:
   components:
     # use the latest revision of Android SDK Tools
     - tools
-    - platform-tools
-    - tools
     
      # The BuildTools version used by your project
-    - build-tools-27
+    - build-tools-26.0.2
+    
+    - platform-tools
     
      # Extra
     - extra-android-support
@@ -21,7 +21,3 @@ android:
 
   licenses:
     - '.+'
-
-script: ./gradlew clean test
-before_script:
-  - chmod +x gradlew

@@ -18,6 +18,7 @@ package com.danimahardhika.cafebar;
  * limitations under the License.
  */
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -55,6 +56,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class CafeBar {
@@ -369,16 +371,15 @@ public class CafeBar {
         }
     }
 
-
-
     private boolean isAccessibilityManagerEnabled() {
         String manufacturer = android.os.Build.MANUFACTURER;
-        if (manufacturer.equalsIgnoreCase("xiaomi") ||
-                manufacturer.equalsIgnoreCase("google")) {
+        //Todo:
+       // if (manufacturer.equalsIgnoreCase("xiaomi") ||
+                //manufacturer.equalsIgnoreCase("google")) {
             //Seriously accessibility manager on xiaomi device is a mess
             //Better to returns false
-            return false;
-        }
+            //return false;
+        //}
 
         int accessibilityEnabled = 0;
         try {
@@ -387,19 +388,34 @@ public class CafeBar {
             LogUtil.d("Accessibility manager enabled ? " +accessibilityEnabled);
         } catch (Exception e) {
             LogUtil.d("Accessibility manager is disabled");
+            return false;
         }
-        return accessibilityEnabled == 1;
+
+        boolean accessibilityManagerRunning = false;
+        try {
+            AccessibilityManager accessibilityManager = (AccessibilityManager) mBuilder.mContext
+                    .getSystemService(Context.ACCESSIBILITY_SERVICE);
+            if (accessibilityManager != null && accessibilityManager.isEnabled()) {
+                accessibilityManagerRunning = true;
+            }
+            LogUtil.d("Accessibility manager running ? " + accessibilityManagerRunning);
+        } catch (Exception e) {
+            LogUtil.e(Log.getStackTraceString(e));
+        }
+        return accessibilityEnabled == 1 && accessibilityManagerRunning;
     }
 
     private void setAccessibilityManagerDisabled() {
         try {
             if (!isAccessibilityManagerEnabled()) {
+                LogUtil.d("Accessibility manager disabled, let system animate the cafebar");
                 return;
             }
 
             /*
              * This code taken from https://stackoverflow.com/a/43811447
              */
+            LogUtil.d("Accessibility manager enabled, forcing cafebar to animate");
             Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
             mAccessibilityManagerField.setAccessible(true);
             AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);

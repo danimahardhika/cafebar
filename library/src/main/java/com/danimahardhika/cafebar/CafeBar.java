@@ -18,7 +18,6 @@ package com.danimahardhika.cafebar;
  * limitations under the License.
  */
 
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -56,7 +55,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class CafeBar {
@@ -354,25 +352,29 @@ public class CafeBar {
 
     public void show() {
         setAccessibilityManagerDisabled();
-        mSnackBar.show();
 
-        if (mBuilder.mSwipeToDismiss) return;
+        try {
+            mSnackBar.show();
 
-        if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
-            mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            if (mBuilder.mSwipeToDismiss) return;
 
-                @Override
-                public boolean onPreDraw() {
-                    mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                    ((CoordinatorLayout.LayoutParams) mSnackBar.getView().getLayoutParams()).setBehavior(null);
-                    return true;
-                }
-            });
+            if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+                mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+                    @Override
+                    public boolean onPreDraw() {
+                        mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
+                        ((CoordinatorLayout.LayoutParams) mSnackBar.getView().getLayoutParams()).setBehavior(null);
+                        return true;
+                    }
+                });
+            }
+        } catch (Exception e) {
+            LogUtil.e(Log.getStackTraceString(e));
         }
     }
 
-    private boolean isAccessibilityManagerEnabled() {
-        String manufacturer = android.os.Build.MANUFACTURER;
+    private boolean isAccessibilityManagerServiceEnabled() {
         //Todo:
        // if (manufacturer.equalsIgnoreCase("xiaomi") ||
                 //manufacturer.equalsIgnoreCase("google")) {
@@ -407,7 +409,7 @@ public class CafeBar {
 
     private void setAccessibilityManagerDisabled() {
         try {
-            if (!isAccessibilityManagerEnabled()) {
+            if (!isAccessibilityManagerServiceEnabled()) {
                 LogUtil.d("Accessibility manager disabled, let system animate the cafebar");
                 return;
             }
@@ -415,7 +417,6 @@ public class CafeBar {
             /*
              * This code taken from https://stackoverflow.com/a/43811447
              */
-            LogUtil.d("Accessibility manager enabled, forcing cafebar to animate");
             Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
             mAccessibilityManagerField.setAccessible(true);
             AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);
@@ -424,8 +425,10 @@ public class CafeBar {
             mIsEnabledField.setAccessible(true);
             mIsEnabledField.setBoolean(accessibilityManager, false);
             mAccessibilityManagerField.set(mSnackBar, accessibilityManager);
+            LogUtil.d("Accessibility manager enabled, forcing cafebar to animate");
         } catch (Exception e) {
-            LogUtil.d(Log.getStackTraceString(e));
+            LogUtil.e(Log.getStackTraceString(e));
+            LogUtil.d("Unable to force animate cafebar, let system handle it");
         }
     }
 

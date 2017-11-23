@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.BoolRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
@@ -35,25 +34,21 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.CardView;
 import android.text.SpannableStringBuilder;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 
 @SuppressWarnings("unused")
@@ -351,84 +346,20 @@ public class CafeBar {
     }
 
     public void show() {
-        setAccessibilityManagerDisabled();
+        mSnackBar.show();
 
-        try {
-            mSnackBar.show();
+        if (mBuilder.mSwipeToDismiss) return;
 
-            if (mBuilder.mSwipeToDismiss) return;
+        if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
+            mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 
-            if (mSnackBar.getView().getLayoutParams() instanceof CoordinatorLayout.LayoutParams) {
-                mSnackBar.getView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-
-                    @Override
-                    public boolean onPreDraw() {
-                        mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
-                        ((CoordinatorLayout.LayoutParams) mSnackBar.getView().getLayoutParams()).setBehavior(null);
-                        return true;
-                    }
-                });
-            }
-        } catch (Exception e) {
-            LogUtil.e(Log.getStackTraceString(e));
-        }
-    }
-
-    private boolean isAccessibilityManagerServiceEnabled() {
-        //Todo:
-       // if (manufacturer.equalsIgnoreCase("xiaomi") ||
-                //manufacturer.equalsIgnoreCase("google")) {
-            //Seriously accessibility manager on xiaomi device is a mess
-            //Better to returns false
-            //return false;
-        //}
-
-        int accessibilityEnabled = 0;
-        try {
-            accessibilityEnabled = Settings.Secure.getInt(mBuilder.mContext.getContentResolver(),
-                    android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
-            LogUtil.d("Accessibility manager enabled ? " +accessibilityEnabled);
-        } catch (Exception e) {
-            LogUtil.d("Accessibility manager is disabled");
-            return false;
-        }
-
-        boolean accessibilityManagerRunning = false;
-        try {
-            AccessibilityManager accessibilityManager = (AccessibilityManager) mBuilder.mContext
-                    .getSystemService(Context.ACCESSIBILITY_SERVICE);
-            if (accessibilityManager != null && accessibilityManager.isEnabled()) {
-                accessibilityManagerRunning = true;
-            }
-            LogUtil.d("Accessibility manager running ? " + accessibilityManagerRunning);
-        } catch (Exception e) {
-            LogUtil.e(Log.getStackTraceString(e));
-        }
-        return accessibilityEnabled == 1 && accessibilityManagerRunning;
-    }
-
-    private void setAccessibilityManagerDisabled() {
-        try {
-            if (!isAccessibilityManagerServiceEnabled()) {
-                LogUtil.d("Accessibility manager disabled, let system animate the cafebar");
-                return;
-            }
-
-            /*
-             * This code taken from https://stackoverflow.com/a/43811447
-             */
-            Field mAccessibilityManagerField = BaseTransientBottomBar.class.getDeclaredField("mAccessibilityManager");
-            mAccessibilityManagerField.setAccessible(true);
-            AccessibilityManager accessibilityManager = (AccessibilityManager) mAccessibilityManagerField.get(mSnackBar);
-            Field mIsEnabledField = AccessibilityManager.class.getDeclaredField("mIsEnabled");
-
-            mIsEnabledField.setAccessible(true);
-            mIsEnabledField.setBoolean(accessibilityManager, false);
-            mAccessibilityManagerField.set(mSnackBar, accessibilityManager);
-            LogUtil.d("Accessibility manager enabled, forcing cafebar to animate");
-        } catch (Exception e) {
-            LogUtil.e(Log.getStackTraceString(e));
-            LogUtil.d("Unable to force animate cafebar, let system handle it");
+                @Override
+                public boolean onPreDraw() {
+                    mSnackBar.getView().getViewTreeObserver().removeOnPreDrawListener(this);
+                    ((CoordinatorLayout.LayoutParams) mSnackBar.getView().getLayoutParams()).setBehavior(null);
+                    return true;
+                }
+            });
         }
     }
 

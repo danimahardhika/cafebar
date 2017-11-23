@@ -91,10 +91,10 @@ public class CafeBar {
         } else {
             //Contains positive or negative button
             LinearLayout root = (LinearLayout) getView();
-            LinearLayout buttonBase = (LinearLayout) root.findViewById(R.id.cafebar_button_base);
+            LinearLayout buttonBase = root.findViewById(R.id.cafebar_button_base);
 
             if (mBuilder.mNeutralText != null) {
-                TextView neutral = (TextView) buttonBase.findViewById(R.id.cafebar_button_neutral);
+                TextView neutral = buttonBase.findViewById(R.id.cafebar_button_neutral);
                 neutral.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -110,7 +110,7 @@ public class CafeBar {
             }
 
             if (mBuilder.mNegativeText != null) {
-                TextView negative = (TextView) buttonBase.findViewById(R.id.cafebar_button_negative);
+                TextView negative = buttonBase.findViewById(R.id.cafebar_button_negative);
                 negative.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -125,7 +125,7 @@ public class CafeBar {
             }
 
             if (mBuilder.mPositiveText != null) {
-                TextView positive = (TextView) buttonBase.findViewById(R.id.cafebar_button_positive);
+                TextView positive = buttonBase.findViewById(R.id.cafebar_button_positive);
                 positive.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -229,7 +229,7 @@ public class CafeBar {
             return;
         }
 
-        TextView content = (TextView) root.findViewById(R.id.cafebar_content);
+        TextView content = root.findViewById(R.id.cafebar_content);
 
         int side = mBuilder.mContext.getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_side);
         int top = mBuilder.mContext.getResources().getDimensionPixelSize(R.dimen.cafebar_content_padding_top);

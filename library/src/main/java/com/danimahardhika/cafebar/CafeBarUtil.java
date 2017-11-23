@@ -259,7 +259,7 @@ class CafeBarUtil {
             snackBarLayout.setElevation(0);
         }
 
-        TextView textView = (TextView) snackBarLayout.findViewById(
+        TextView textView = snackBarLayout.findViewById(
                 android.support.design.R.id.snackbar_text);
         if (textView != null) textView.setVisibility(View.INVISIBLE);
 

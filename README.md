@@ -19,7 +19,7 @@ allprojects {
 Add the dependency
 ```Gradle
 dependencies {
-    implementation 'com.github.danimahardhika:cafebar:1.3.0'
+    implementation 'com.github.danimahardhika:cafebar:1.3.1'
 }
 ```
 

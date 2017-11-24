@@ -95,37 +95,46 @@ public class CafeBar {
 
             if (mBuilder.mNeutralText != null) {
                 TextView neutral = buttonBase.findViewById(R.id.cafebar_button_neutral);
-                neutral.setOnClickListener(view -> {
-                    if (mBuilder.mNeutralCallback != null) {
-                        mBuilder.mNeutralCallback.OnClick(getCafeBar());
-                        return;
-                    }
+                neutral.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mBuilder.mNeutralCallback != null) {
+                            mBuilder.mNeutralCallback.OnClick(getCafeBar());
+                            return;
+                        }
 
-                    dismiss();
+                        dismiss();
+                    }
                 });
             }
 
             if (mBuilder.mNegativeText != null) {
                 TextView negative = buttonBase.findViewById(R.id.cafebar_button_negative);
-                negative.setOnClickListener(view -> {
-                    if (mBuilder.mNegativeCallback != null) {
-                        mBuilder.mNegativeCallback.OnClick(getCafeBar());
-                        return;
-                    }
+                negative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mBuilder.mNegativeCallback != null) {
+                            mBuilder.mNegativeCallback.OnClick(getCafeBar());
+                            return;
+                        }
 
-                    dismiss();
+                        dismiss();
+                    }
                 });
             }
 
             if (mBuilder.mPositiveText != null) {
                 TextView positive = buttonBase.findViewById(R.id.cafebar_button_positive);
-                positive.setOnClickListener(view -> {
-                    if (mBuilder.mPositiveCallback != null) {
-                        mBuilder.mPositiveCallback.OnClick(getCafeBar());
-                        return;
-                    }
+                positive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mBuilder.mPositiveCallback != null) {
+                            mBuilder.mPositiveCallback.OnClick(getCafeBar());
+                            return;
+                        }
 
-                    dismiss();
+                        dismiss();
+                    }
                 });
             }
         }
@@ -290,14 +299,18 @@ public class CafeBar {
             }
         }
 
-        button.setOnClickListener(view -> {
-            if (callback != null) {
-                callback.OnClick(getCafeBar());
-                return;
-            }
+        button.setOnClickListener(new View.OnClickListener() {
 
-            LogUtil.d("callback = null, CafeBar dismissed");
-            dismiss();
+            @Override
+            public void onClick(View view) {
+                if (callback != null) {
+                    callback.OnClick(getCafeBar());
+                    return;
+                }
+
+                LogUtil.d("callback = null, CafeBar dismissed");
+                dismiss();
+            }
         });
 
         root.addView(button);

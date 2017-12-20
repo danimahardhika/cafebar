@@ -395,7 +395,7 @@ public class CafeBar {
         boolean mFloating = false;
         boolean mTintIcon = true;
         boolean mSwipeToDismiss = true;
-        Snackbar.Callback callback;
+        private Snackbar.Callback callback;
 
         private HashMap<String, WeakReference<Typeface>> mTypefaces;
 

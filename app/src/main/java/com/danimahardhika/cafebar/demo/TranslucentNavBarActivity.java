@@ -149,7 +149,7 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
             }
         });
 
-        //Themed with Long Text Swipe to dismiss with callback
+        //Floating Swipeable with callback
         findViewById(R.id.themed_long_action_swipe_to_dismiss_with_callback).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 CafeBar.builder(TranslucentNavBarActivity.this)

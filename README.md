@@ -89,7 +89,7 @@ CafeBar.builder(context)
     .show();
 ```
 
-#### Custom Theme
+#### With visibility callback
 ```java
 CafeBar.builder(context)
     .content(R.string.text)

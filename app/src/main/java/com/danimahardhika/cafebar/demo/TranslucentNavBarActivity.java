@@ -3,11 +3,14 @@ package com.danimahardhika.cafebar.demo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
+import android.widget.Toast;
 import com.danimahardhika.cafebar.CafeBar;
+import com.danimahardhika.cafebar.CafeBarTheme;
 
 public class TranslucentNavBarActivity extends AppCompatActivity {
 
@@ -143,6 +146,33 @@ public class TranslucentNavBarActivity extends AppCompatActivity {
                     }
                 });
                 cafeBar.show();
+            }
+        });
+
+        //Themed with Long Text Swipe to dismiss with callback
+        findViewById(R.id.themed_long_action_swipe_to_dismiss_with_callback).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                CafeBar.builder(TranslucentNavBarActivity.this)
+                    //Set theme first, then set positive, negative, or neutral color
+                    .theme(CafeBarTheme.CLEAR_BLACK)
+                    .content(R.string.demo_text)
+                    .swipeToDismiss(true)
+                    .floating(true)
+                    .to(findViewById(R.id.coordinator))
+                    .autoDismiss(false)
+                    .maxLines(4)
+                    .callback(new Snackbar.Callback() {
+                        @Override public void onDismissed(Snackbar transientBottomBar, int event) {
+                            super.onDismissed(transientBottomBar, event);
+                            Toast.makeText(TranslucentNavBarActivity.this, "CafeBar dismissed", Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override public void onShown(Snackbar sb) {
+                            super.onShown(sb);
+                            Toast.makeText(TranslucentNavBarActivity.this, "CafeBar shown", Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .show();
             }
         });
     }

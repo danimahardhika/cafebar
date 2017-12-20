@@ -89,6 +89,24 @@ CafeBar.builder(context)
     .show();
 ```
 
+#### With visibility callback
+```java
+CafeBar.builder(context)
+    .content(R.string.text)
+    .callback(new Snackbar.Callback() {
+        @Override public void onDismissed(Snackbar transientBottomBar, int event) {
+            super.onDismissed(transientBottomBar, event);
+            Toast.makeText(context, "CafeBar dismissed", Toast.LENGTH_LONG).show();
+        }
+
+        @Override public void onShown(Snackbar sb) {
+            super.onShown(sb);
+            Toast.makeText(context, "CafeBar shown", Toast.LENGTH_LONG).show();
+        }
+    })
+    .show();
+```
+
 #### Custom Font
 ```java
 CafeBar.builder(context)

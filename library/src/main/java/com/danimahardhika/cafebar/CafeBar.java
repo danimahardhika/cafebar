@@ -77,6 +77,10 @@ public class CafeBar {
             throw new IllegalStateException("CafeBar base is null");
         }
 
+        if (builder.callback != null) {
+            mSnackBar.addCallback(builder.callback);
+        }
+
         if (mBuilder.mCustomView != null) {
             LogUtil.d("CafeBar has custom view, set buttons ignored");
             return;
@@ -391,6 +395,7 @@ public class CafeBar {
         boolean mFloating = false;
         boolean mTintIcon = true;
         boolean mSwipeToDismiss = true;
+        private Snackbar.Callback callback;
 
         private HashMap<String, WeakReference<Typeface>> mTypefaces;
 
@@ -557,6 +562,11 @@ public class CafeBar {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) {
                 mFitSystemWindow = navigationBarHeight > 0 && !isInMultiWindowMode;
             }
+            return this;
+        }
+
+        public Builder callback(Snackbar.Callback callback) {
+            this.callback = callback;
             return this;
         }
 

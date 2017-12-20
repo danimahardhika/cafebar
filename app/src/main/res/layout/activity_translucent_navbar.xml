@@ -40,6 +40,12 @@
                 android:text="Floating Under Navbar" />
 
             <android.support.v7.widget.AppCompatButton
+                android:id="@+id/themed_long_action_swipe_to_dismiss_with_callback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floating Swipeable with callback" />
+
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/floating_above_navbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
